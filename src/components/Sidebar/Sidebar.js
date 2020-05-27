@@ -55,7 +55,8 @@ export default function Sidebar(props) {
               {typeof prop.icon === "string" ? (
                 <Icon
                   className={classNames(classes.itemIcon, whiteFontClasses, {
-                    [classes.itemIconRTL]: props.rtlActive
+                    // [classes.itemIconRTL]: props.rtlActive
+                    [classes.itemIconRTL]: false
                   })}
                 >
                   {prop.icon}
@@ -63,14 +64,17 @@ export default function Sidebar(props) {
               ) : (
                 <prop.icon
                   className={classNames(classes.itemIcon, whiteFontClasses, {
-                    [classes.itemIconRTL]: props.rtlActive
+                    // [classes.itemIconRTL]: props.rtlActive
+                    [classes.itemIconRTL]: false
                   })}
                 />
               )}
               <ListItemText
-                primary={props.rtlActive ? prop.rtlName : prop.name}
+                // primary={props.rtlActive ? prop.rtlName : prop.name}
+                primary={prop.name}
                 className={classNames(classes.itemText, whiteFontClasses, {
-                  [classes.itemTextRTL]: props.rtlActive
+                  // [classes.itemTextRTL]: props.rtlActive
+                  [classes.itemTextRTL]: false
                 })}
                 disableTypography={true}
               />
@@ -85,7 +89,8 @@ export default function Sidebar(props) {
       <a
         href="https://www.creative-tim.com?ref=mdr-sidebar"
         className={classNames(classes.logoLink, {
-          [classes.logoLinkRTL]: props.rtlActive
+          // [classes.logoLinkRTL]: props.rtlActive
+          [classes.logoLinkRTL]: false
         })}
         target="_blank"
       >
@@ -101,11 +106,13 @@ export default function Sidebar(props) {
       <Hidden mdUp implementation="css">
         <Drawer
           variant="temporary"
-          anchor={props.rtlActive ? "left" : "right"}
+          // anchor={props.rtlActive ? "left" : "right"}
+          anchor="left"
           open={props.open}
           classes={{
             paper: classNames(classes.drawerPaper, {
-              [classes.drawerPaperRTL]: props.rtlActive
+              // [classes.drawerPaperRTL]: props.rtlActive
+              [classes.drawerPaperRTL]: true
             })
           }}
           onClose={props.handleDrawerToggle}
@@ -115,7 +122,8 @@ export default function Sidebar(props) {
         >
           {brand}
           <div className={classes.sidebarWrapper}>
-            {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />}
+            {/* {props.rtlActive ? <RTLNavbarLinks /> : <AdminNavbarLinks />} */}
+            <AdminNavbarLinks />
             {links}
           </div>
           {image !== undefined ? (
@@ -128,12 +136,14 @@ export default function Sidebar(props) {
       </Hidden>
       <Hidden smDown implementation="css">
         <Drawer
-          anchor={props.rtlActive ? "right" : "left"}
+          // anchor={props.rtlActive ? "right" : "left"}
+          anchor= "right"
           variant="permanent"
           open
           classes={{
             paper: classNames(classes.drawerPaper, {
-              [classes.drawerPaperRTL]: props.rtlActive
+              // [classes.drawerPaperRTL]: props.rtlActive
+              [classes.drawerPaperRTL]: false
             })
           }}
         >
@@ -152,7 +162,7 @@ export default function Sidebar(props) {
 }
 
 Sidebar.propTypes = {
-  rtlActive: PropTypes.bool,
+  // rtlActive: PropTypes.bool,
   handleDrawerToggle: PropTypes.func,
   bgColor: PropTypes.oneOf(["purple", "blue", "green", "orange", "red"]),
   logo: PropTypes.string,

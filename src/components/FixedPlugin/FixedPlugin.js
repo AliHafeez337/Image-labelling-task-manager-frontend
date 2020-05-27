@@ -22,7 +22,8 @@ export default function FixedPlugin(props) {
   return (
     <div
       className={classnames("fixed-plugin", {
-        "rtl-fixed-plugin": props.rtlActive
+        // "rtl-fixed-plugin": props.rtlActive
+        "rtl-fixed-plugin": false
       })}
     >
       <div id="fixedPluginClasses" className={props.fixedClasses}>
@@ -30,6 +31,7 @@ export default function FixedPlugin(props) {
           <i className="fa fa-cog fa-2x" />
         </div>
         <ul className="dropdown-menu">
+          <br />
           <li className="header-title">SIDEBAR FILTERS</li>
           <li className="adjustments-line">
             <a className="switch-trigger">
@@ -138,15 +140,15 @@ export default function FixedPlugin(props) {
             </a>
           </li>
 
-          <li className="button-container">
+          {/* <li className="button-container">
             <div className="button-container">
               <Button
                 color="success"
-                href="https://www.creative-tim.com/product/material-dashboard-react?ref=mdr-fixed-plugin"
+                href=""
                 target="_blank"
                 fullWidth
               >
-                Download free!
+                Button 1
               </Button>
             </div>
           </li>
@@ -154,14 +156,14 @@ export default function FixedPlugin(props) {
             <div className="button-container">
               <Button
                 color="warning"
-                href="https://www.creative-tim.com/product/material-dashboard-pro-react?ref=mdr-fixed-plugin"
+                href=""
                 target="_blank"
                 fullWidth
               >
-                Get PRO version
+                Button 2
               </Button>
             </div>
-          </li>
+          </li> */}
           <li className="button-container">
             <Button
               color="info"
@@ -182,7 +184,7 @@ export default function FixedPlugin(props) {
 FixedPlugin.propTypes = {
   bgImage: PropTypes.string,
   handleFixedClick: PropTypes.func,
-  rtlActive: PropTypes.bool,
+  // rtlActive: PropTypes.bool,
   fixedClasses: PropTypes.string,
   bgColor: PropTypes.oneOf(["purple", "blue", "green", "orange", "red"]),
   handleColorClick: PropTypes.func,
