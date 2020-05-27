@@ -22,7 +22,12 @@ import { Router, Route, Switch, Redirect } from "react-router-dom";
 
 // core components
 import Admin from "layouts/Admin.js";
-
+import UserProfile from "./views/Login/login.js";
+// eslint-disable-next-line
+import $ from 'jquery';
+// eslint-disable-next-line
+import Popper from 'popper.js';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 import "assets/css/material-dashboard-react.css?v=1.8.0";
 
 const hist = createBrowserHistory();
@@ -31,6 +36,7 @@ ReactDOM.render(
   <Router history={hist}>
     <Switch>
       <Route path="/admin" component={Admin} />
+      <Route path="/login" component={UserProfile} />
       <Redirect from="/" to="/admin/dashboard" />
     </Switch>
   </Router>,
