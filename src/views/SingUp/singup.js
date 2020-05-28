@@ -1,4 +1,4 @@
-import React, {Component} from "react";
+import React from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // core components
@@ -7,9 +7,9 @@ import Card from "components/Card/Card.js";
 import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import avatar from "assets/img/faces/singUp.jpg";
-
-
-class SignUp extends Component {
+import axios from "../../axiosSet.js"
+import SnackbarContent from "components/Snackbar/SnackbarContent.js";
+class SignUp extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -30,14 +30,74 @@ class SignUp extends Component {
             marginBottom: "3px",
             textDecoration: "none"
           }
-        }
+        },
+        name:'',
+        email:'',
+        password:'',
+        password2:'',
+        succes:false,
+        succesMsg:'',
+        errr:false,
+        errrMsg:''
       };
     }
-  
+    data={name:'',
+    email:'',
+    password:'',
+    password2:''}
+    handleName = event => {
+      this.data.name= event.target.value;
+    }
+    handleEmail = event => {
+      this.data.email= event.target.value;
+    }
+    handlePassword1 = event => {
+      this.data.password= event.target.value;
+    }
+    handlePassword2 = event => {
+      this.data.password2= event.target.value;
+    }
+
+    register=()=> {
+      
+      this.setState({
+        name:this.data.name,
+        email:this.data.email,
+        password:this.data.password,
+        password2:this.data.password2
+      },()=>{
+        const user = {name:this.state.name,email:this.state.email,password:this.state.password,password2:this.state.password2};
+        console.log(user);
+        axios.post('/user/register', user)
+        .then(res => {
+          console.log(res);
+          console.log(res.data);
+          if(res.data.msg){
+            this.setState({errr:false});
+            this.setState({succes:true});
+            this.setState({succesMsg:res.data.msg});
+          }
+          else if(res.data.errmsg.msg){
+            this.setState({errr:true});
+            this.setState({succes:false});
+            this.setState({succesMsg:res.data.errmsg.msg});
+          }
+        }) ;
+      });
+    }
+
     render() {
       makeStyles(this.state.styles);
+      let notifi;
+      if(this.state.succes){
+        notifi=<SnackbarContent message={'SUCCESS'+this.state.succesMsg} close color="success"/>;
+      }else if(this.state.errr){
+        notifi=<SnackbarContent message={'Error'+this.state.errrMsg} close color="danger"/>;
+      }
+      
       return (
         <div className="container-fluid" style={{paddingTop: '70px'}}>
+          {notifi}<br/>
           <div className="row">
             <div className="col-lg-6 col-md-6 col-sm-12 offset-lg-3 offset-md-3">
               <Card profile>
@@ -45,20 +105,20 @@ class SignUp extends Component {
                   <img src={avatar} alt="..." />
                 </CardAvatar>
                 <CardBody profile>
-                    <div class="form-group">
-                    <label for="exampleInputName">Name</label>
-                    <input type="text" class="form-control" id="exampleInputName" aria-describedby="emailHelp" placeholder="Enter name"/>
+                    <div className="form-group">
+                    <input type="text" className="form-control" id="exampleInputName" aria-describedby="emailHelp" placeholder="Enter name" onChange={this.handleName}/>
                     </div>
-                    <div class="form-group">
-                      <label for="exampleInputEmail1">Email address</label>
-                      <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"/>
-                      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                    <div className="form-group">
+                      <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" onChange={this.handleEmail}/>
+                      <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
                     </div>
-                    <div class="form-group">
-                      <label for="exampleInputPassword1">Password</label>
-                      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"/>
+                    <div className="form-group">
+                      <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" onChange={this.handlePassword1}/>
                     </div>
-                    <Button color="success">
+                    <div className="form-group">
+                      <input type="password" className="form-control" id="exampleInputPassword2" placeholder="Retype Password" onChange={this.handlePassword2}/>
+                    </div>
+                    <Button color="success" onClick={this.register}>
                         SignUp
                     </Button>             
                 </CardBody>
