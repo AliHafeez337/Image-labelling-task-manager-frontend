@@ -23,10 +23,9 @@ import { Router, Route, Switch, Redirect } from "react-router-dom";
 // core components
 import Admin from "layouts/Admin.js";
 import UserProfile from "./views/Login/login.js";
-// eslint-disable-next-line
-import $ from 'jquery';
-// eslint-disable-next-line
-import Popper from 'popper.js';
+import 'jquery/src/jquery';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.min.js';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import "assets/css/material-dashboard-react.css?v=1.8.0";
 
