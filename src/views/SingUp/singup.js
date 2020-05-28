@@ -70,19 +70,18 @@ class SignUp extends React.Component {
         console.log(user);
         axios.post('/user/register', user)
         .then(res => {
-          console.log(res);
           console.log(res.data);
           if(res.data.msg){
             this.setState({errr:false});
             this.setState({succes:true});
             this.setState({succesMsg:res.data.msg});
           }
-          else if(res.data.errmsg.msg){
+          else if(res.data.errmsg){
             this.setState({errr:true});
             this.setState({succes:false});
-            this.setState({succesMsg:res.data.errmsg.msg});
+            this.setState({errrMsg:res.data.errmsg[0].msg});
           }
-        }) ;
+        });
       });
     }
 
@@ -90,9 +89,9 @@ class SignUp extends React.Component {
       makeStyles(this.state.styles);
       let notifi;
       if(this.state.succes){
-        notifi=<SnackbarContent message={'SUCCESS'+this.state.succesMsg} close color="success"/>;
+        notifi=<SnackbarContent message={'SUCCESS: '+this.state.succesMsg} close color="success"/>;
       }else if(this.state.errr){
-        notifi=<SnackbarContent message={'Error'+this.state.errrMsg} close color="danger"/>;
+        notifi=<SnackbarContent message={'Error: '+this.state.errrMsg} close color="danger"/>;
       }
       
       return (
