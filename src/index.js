@@ -22,7 +22,9 @@ import { Router, Route, Switch, Redirect } from "react-router-dom";
 
 // core components
 import Admin from "layouts/Admin.js";
-import UserProfile from "./views/Login/login.js";
+import Login from "./views/Login/login.js";
+import SingUp from "./views/SingUp/singup.js";
+
 import 'jquery/src/jquery';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
@@ -35,7 +37,8 @@ ReactDOM.render(
   <Router history={hist}>
     <Switch>
       <Route path="/admin" component={Admin} />
-      <Route path="/login" component={UserProfile} />
+      <Route path="/login" component={Login} />
+      <Route path="/signup" component={SingUp} />
       <Redirect from="/" to="/admin/dashboard" />
     </Switch>
   </Router>,
