@@ -18,6 +18,7 @@
 // @material-ui/icons
 import Dashboard from "@material-ui/icons/Dashboard";
 import Person from "@material-ui/icons/Person";
+import Assignment from "@material-ui/icons/Assignment";
 // import LibraryBooks from "@material-ui/icons/LibraryBooks";
 // import BubbleChart from "@material-ui/icons/BubbleChart";
 // import LocationOn from "@material-ui/icons/LocationOn";
@@ -34,6 +35,13 @@ const dashboardRoutes = [
     path: "/dashboard",
     name: "Dashboard",
     icon: Dashboard,
+    component: DashboardPage,
+    layout: "/admin"
+  },
+  {
+    path: "/task",
+    name: "Recent Task",
+    icon: Assignment,
     component: DashboardPage,
     layout: "/admin"
   },
