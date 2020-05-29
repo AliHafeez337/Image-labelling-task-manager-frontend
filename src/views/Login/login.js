@@ -13,6 +13,7 @@ import axios from '../../axiosSet';
 
 class Login extends Component {
   constructor(props) {
+    console.log('yes')
     super(props);
     this.state = {
       styles : {

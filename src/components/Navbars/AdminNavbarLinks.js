@@ -20,6 +20,8 @@ import Button from "components/CustomButtons/Button.js";
 
 import styles from "assets/jss/material-dashboard-react/components/headerLinksStyle.js";
 
+import axios from '../../axiosSet';
+
 const useStyles = makeStyles(styles);
 
 export default function AdminNavbarLinks() {
@@ -35,6 +37,21 @@ export default function AdminNavbarLinks() {
   };
   const handleCloseProfile = () => {
     setOpenProfile(null);
+  };
+  const handleLogoutClick = () => {
+    setOpenProfile(null);
+    console.log(this.props)
+    // axios.get('/user/logout')
+    // .then(res => {
+    //   console.log(res.data);
+    //   localStorage.removeItem("token");
+    //   localStorage.removeItem("useId");
+    //   localStorage.removeItem("name");
+    //   localStorage.removeItem("email");
+    //   localStorage.removeItem("archived");
+    //   localStorage.removeItem("usertype");
+    //   this.props.history.push(`/admin/dashboard`)
+    // })
   };
   return (
     <div>
@@ -113,7 +130,7 @@ export default function AdminNavbarLinks() {
                     </MenuItem>
                     <Divider light />
                     <MenuItem
-                      onClick={handleCloseProfile}
+                      onClick={handleLogoutClick}
                       className={classes.dropdownItem}
                     >
                       Logout

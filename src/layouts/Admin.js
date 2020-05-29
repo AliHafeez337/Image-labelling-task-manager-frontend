@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
@@ -40,7 +40,11 @@ const switchRoutes = (
 
 const useStyles = makeStyles(styles);
 
-export default function Admin({ ...rest }) {
+const AdminComponent = function Admin({ ...rest }) {
+  if(localStorage.getItem('token') === null){
+    console.log(rest.history.push('login'))
+  }
+
   // styles
   const classes = useStyles();
   // ref to help us initialize PerfectScrollbar on windows devices
@@ -112,3 +116,5 @@ export default function Admin({ ...rest }) {
     </div>
   );
 }
+
+export default withRouter(AdminComponent)
