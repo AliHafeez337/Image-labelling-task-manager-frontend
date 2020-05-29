@@ -1,5 +1,6 @@
 import React from "react";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
+
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
@@ -42,7 +43,8 @@ const useStyles = makeStyles(styles);
 
 const AdminComponent = function Admin({ ...rest }) {
   if(localStorage.getItem('token') === null){
-    console.log(rest.history.push('login'))
+    console.log('Token not found.')
+    rest.history.push('../login')
   }
 
   // styles
@@ -67,6 +69,12 @@ const AdminComponent = function Admin({ ...rest }) {
       setMobileOpen(false);
     }
   };
+  // const redir = () => {
+  //   if(localStorage.getItem('token') === null){
+  //     console.log('Token not found.')
+  //     return true
+  //   }
+  // }
   // initialize and destroy the PerfectScrollbar plugin
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
@@ -87,6 +95,7 @@ const AdminComponent = function Admin({ ...rest }) {
   }, [mainPanel]);
   return (
     <div className={classes.wrapper}>
+      {/* {redir() ? <Redirect to="/login" /> : null} */}
       <Sidebar
         routes={routes}
         logoText={"Creative Tim"}

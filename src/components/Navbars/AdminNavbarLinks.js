@@ -1,5 +1,7 @@
 import React from "react";
 import classNames from "classnames";
+import { withRouter } from "react-router-dom";
+import { connect } from 'react-redux';
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -24,7 +26,7 @@ import axios from '../../axiosSet';
 
 const useStyles = makeStyles(styles);
 
-export default function AdminNavbarLinks() {
+const AdminNavbarLinks = (props) => {
   const classes = useStyles();
   const [openProfile, setOpenProfile] = React.useState(null);
 
@@ -38,10 +40,9 @@ export default function AdminNavbarLinks() {
   const handleCloseProfile = () => {
     setOpenProfile(null);
   };
-  const logout = () => {
-    axios.post('/user/logout')
+  const handleLogoutFunction = () => {
+    axios.get('/user/logout')
       .then(res => {
-        console.log(res.data);
         if(res.data.message){
           localStorage.removeItem("token");
           localStorage.removeItem("useId");
@@ -50,7 +51,7 @@ export default function AdminNavbarLinks() {
           localStorage.removeItem("archived");
           localStorage.removeItem("usertype");
           setTimeout(() => {
-            this.props.history.push(`/login`);
+            props.history.push('../../login')
           }, 500)
         }
       });
@@ -58,6 +59,7 @@ export default function AdminNavbarLinks() {
   return (
     <div>
       {/* search */}
+      {/* {console.log(props.token)} */}
       <div className={classes.searchWrapper} style={{paddingRight:'80px' }}>
         <CustomInput
           formControlProps={{
@@ -132,7 +134,7 @@ export default function AdminNavbarLinks() {
                     </MenuItem>
                     <Divider light />
                     <MenuItem
-                      onClick={logout}
+                      onClick={handleLogoutFunction}
                       className={classes.dropdownItem}
                     >
                       Logout
@@ -148,3 +150,11 @@ export default function AdminNavbarLinks() {
     </div>
   );
 }
+
+const mapStoreToProps = state => {
+  return {
+    token: state.token
+  }
+}
+
+export default connect(mapStoreToProps, null)(withRouter(AdminNavbarLinks))
