@@ -38,20 +38,22 @@ export default function AdminNavbarLinks() {
   const handleCloseProfile = () => {
     setOpenProfile(null);
   };
-  const handleLogoutClick = () => {
-    setOpenProfile(null);
-    console.log(this.props)
-    // axios.get('/user/logout')
-    // .then(res => {
-    //   console.log(res.data);
-    //   localStorage.removeItem("token");
-    //   localStorage.removeItem("useId");
-    //   localStorage.removeItem("name");
-    //   localStorage.removeItem("email");
-    //   localStorage.removeItem("archived");
-    //   localStorage.removeItem("usertype");
-    //   this.props.history.push(`/admin/dashboard`)
-    // })
+  const logout = () => {
+    axios.post('/user/logout')
+      .then(res => {
+        console.log(res.data);
+        if(res.data.message){
+          localStorage.removeItem("token");
+          localStorage.removeItem("useId");
+          localStorage.removeItem("name");
+          localStorage.removeItem("email");
+          localStorage.removeItem("archived");
+          localStorage.removeItem("usertype");
+          setTimeout(() => {
+            this.props.history.push(`/login`);
+          }, 500)
+        }
+      });
   };
   return (
     <div>
@@ -130,7 +132,7 @@ export default function AdminNavbarLinks() {
                     </MenuItem>
                     <Divider light />
                     <MenuItem
-                      onClick={handleLogoutClick}
+                      onClick={logout}
                       className={classes.dropdownItem}
                     >
                       Logout
