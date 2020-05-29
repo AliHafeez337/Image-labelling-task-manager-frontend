@@ -119,7 +119,11 @@ class SignUp extends React.Component {
                     </div>
                     <Button color="success" onClick={this.register}>
                         SignUp
-                    </Button>             
+                    </Button>  
+                    <br />
+                    <Button color="primary" onClick={() => {this.props.history.push(`/login`)}}>
+                        Back to Login
+                    </Button>            
                 </CardBody>
               </Card>
             </div>
