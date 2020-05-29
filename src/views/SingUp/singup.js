@@ -9,8 +9,9 @@ import Card from "components/Card/Card.js";
 import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import avatar from "assets/img/faces/singUp.jpg";
-import axios from "../../axiosSet.js";
+import axios from '../../axiosSet';
 import SnackbarContent from "components/Snackbar/SnackbarContent.js";
+
 class SignUp extends React.Component {
     constructor(props) {
       super(props);
@@ -122,9 +123,10 @@ class SignUp extends React.Component {
                     <Button color="success" onClick={this.register}>
                         SignUp
                     </Button>
-                    <Button color="success" round component={Link} to="/login">
-                      Login Now
-                  </Button>             
+                    <small id="emailHelp" className="form-text text-muted">Already have an account? Login now.</small>
+                    <Button color="primary" onClick={() => {this.props.history.push(`/login`)}}>
+                        Back to SignIn
+                    </Button>           
                 </CardBody>
               </Card>
             </div>

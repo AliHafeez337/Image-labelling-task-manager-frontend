@@ -1,10 +1,22 @@
 import axios from 'axios'
 
-export default axios.create({
-    baseURL:'http://localhost:3100',
-    // ,
-    // You can add your headers here
-    // headers: {
-    //   'x-auth': Store.getters.getToken
-    // }
+const baseURL = 'http://localhost:3100'
+
+axios.defaults.baseURL = baseURL
+
+axios.defaults.headers.common['Authorization'] = 'bearer ' + localStorage.getItem('token')
+
+axios.interceptors.request.use(config => {
+  console.log('Request Interceptor', config)
+  return config
 })
+
+axios.interceptors.response.use(res => {
+  console.log('Response Interceptor', res)
+  // if (res.config.url === '/user/login') {
+  //   axios.defaults.headers.common['x-auth'] = res.data.token
+  // }
+  return res
+})
+
+export default axios

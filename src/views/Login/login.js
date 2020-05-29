@@ -9,8 +9,7 @@ import SnackbarContent from "components/Snackbar/SnackbarContent.js";
 import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import avatar from "assets/img/faces/marc1.jpg";
-import axios from "../../axiosSet.js"
-
+import axios from '../../axiosSet';
 
 class Login extends Component {
   constructor(props) {
@@ -70,6 +69,9 @@ class Login extends Component {
           localStorage.setItem("email",res.data.user.email);
           localStorage.setItem("archived",res.data.user.archived);
           localStorage.setItem("usertype",res.data.user.usertype);
+          setTimeout(() => {
+            this.props.history.push(`/admin/dashboard`)
+          }, 500)
         }
         else if(res.data.errmsg){
           this.setState({errr:true});
@@ -104,11 +106,11 @@ class Login extends Component {
                   <div className="form-group">
                     <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" onChange={this.handlePassword1}/>
                   </div>
-                  <Button color="primary" round onClick={this.loginMethod}>
+                  <Button color="success" round onClick={this.loginMethod}>
                       Login
                   </Button>
-                  <small id="emailHelp" className="form-text text-muted">Dont have an account ! SingUp here.</small>
-                  <Button color="success" round component={Link} to="/signup">
+                  <small id="emailHelp" className="form-text text-muted">Dont have an account? SingUp here.</small>
+                  <Button color="primary" round component={Link} to="/signup">
                       SignUp
                   </Button>             
               </CardBody>
