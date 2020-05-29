@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from 'react-router-dom';
+
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // core components
@@ -7,7 +9,7 @@ import Card from "components/Card/Card.js";
 import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import avatar from "assets/img/faces/singUp.jpg";
-import axios from "../../axiosSet.js"
+import axios from "../../axiosSet.js";
 import SnackbarContent from "components/Snackbar/SnackbarContent.js";
 class SignUp extends React.Component {
     constructor(props) {
@@ -119,11 +121,10 @@ class SignUp extends React.Component {
                     </div>
                     <Button color="success" onClick={this.register}>
                         SignUp
-                    </Button>  
-                    <br />
-                    <Button color="primary" onClick={() => {this.props.history.push(`/login`)}}>
-                        Back to Login
-                    </Button>            
+                    </Button>
+                    <Button color="success" round component={Link} to="/login">
+                      Login Now
+                  </Button>             
                 </CardBody>
               </Card>
             </div>
