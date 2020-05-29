@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import { Link,Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // core components
@@ -49,7 +49,7 @@ class Login extends Component {
     this.data.password= event.target.value;
   }
   loginMethod=()=> {
-      
+    console.log(window.location.href)
     this.setState({
       email:this.data.email,
       password:this.data.password,

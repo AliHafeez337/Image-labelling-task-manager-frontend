@@ -1,5 +1,6 @@
 import React from "react";
 import classNames from "classnames";
+import axios from '../../axiosSet.js';
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -35,6 +36,23 @@ export default function AdminNavbarLinks() {
   };
   const handleCloseProfile = () => {
     setOpenProfile(null);
+  };
+  const logout = () => {
+    axios.post('/user/logout')
+      .then(res => {
+        console.log(res.data);
+        if(res.data.message){
+          localStorage.removeItem("token");
+          localStorage.removeItem("useId");
+          localStorage.removeItem("name");
+          localStorage.removeItem("email");
+          localStorage.removeItem("archived");
+          localStorage.removeItem("usertype");
+          setTimeout(() => {
+            this.props.history.push(`/login`);
+          }, 500)
+        }
+      });
   };
   return (
     <div>
@@ -113,7 +131,7 @@ export default function AdminNavbarLinks() {
                     </MenuItem>
                     <Divider light />
                     <MenuItem
-                      onClick={handleCloseProfile}
+                      onClick={logout}
                       className={classes.dropdownItem}
                     >
                       Logout
