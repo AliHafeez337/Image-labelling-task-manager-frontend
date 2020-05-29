@@ -3,8 +3,13 @@ import axios from 'axios'
 const baseURL = 'http://localhost:3100'
 
 axios.defaults.baseURL = baseURL
-
-axios.defaults.headers.common['Authorization'] = 'bearer ' + localStorage.getItem('token')
+if(localStorage.getItem('token') && window.location.href!=='http://localhost:3000/login' && window.location.href!=='http://localhost:3000/signup'){
+  console.log('yyy')
+  axios.defaults.headers.common['Authorization'] = 'bearer ' + localStorage.getItem('token')
+}
+else{
+  console.log('nnn')
+}
 
 axios.interceptors.request.use(config => {
   console.log('Request Interceptor', config)
