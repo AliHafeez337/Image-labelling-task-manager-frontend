@@ -2,9 +2,9 @@ import React from "react";
 import ImageCard from "./ImageCard/imageCard";
 import LabelsCard from "./Labels/labels"
 import CategoriesCard from "./LabelCategories/categories"
-
 import Button from "components/CustomButtons/Button.js";
 
+// import {appendScript} from 'utils/appendScript'
 import axios from '../../axiosSet'
 
 class Task extends React.Component {
@@ -19,9 +19,21 @@ class Task extends React.Component {
       selectedCategory: null,
       labelObjects: [],
       selectedLabel: null,
+      labels: []
     }
   }
   componentDidMount() {  
+    var script = document.createElement("script");
+    script.src = "/annotorious.min.js";
+    script.async = true;
+    document.body.appendChild(script);
+    // script = document.createElement("script");
+    // script.src = "/ann.js";
+    // script.async = true;
+    // document.body.appendChild(script);
+    // appendScript("/annotorious.min.js");
+    // appendScript("/ann.js");
+
     axios.get('/task/5ed20b50d052443ddc52963e')
       .then(res => {
         this.setState({ task: res.data })
@@ -45,7 +57,11 @@ class Task extends React.Component {
             })
           }
         })
-        console.log(this.state.categories)
+        axios.get('/label/picture/'+ this.state.thisPicture._id)
+          .then(res => {
+            // console.log(res.data)
+            this.setState({ labels: res.data })
+          })
       })
   }
   nextPictureHandler = () => {
@@ -85,7 +101,8 @@ class Task extends React.Component {
           <div className="col-lg-8 col-md-8">
             <ImageCard 
               // url= {"https://lokeshdhakar.com/projects/lightbox2/images/image-3.jpg"}
-              photo= {this.state.thisPicture}
+              photo = { this.state.thisPicture }
+              labels = { this.state.labels }
             ></ImageCard>
           </div>
           <div className="col-lg-4 col-md-4">

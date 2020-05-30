@@ -4,11 +4,9 @@ import { makeStyles } from "@material-ui/core/styles";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
-import CardFooter from "components/Card/CardFooter.js";
 
 const styles = {
   cardCategoryWhite: {
@@ -41,7 +39,7 @@ const CategoriesCard = (props) => {
       <tr 
         key = { indx } 
         onClick = { () => props.onSelectCategory(value, indx) }
-        className = { props.selectedCategory == indx ? "bg-success" : null}>
+        className = { props.selectedCategory === indx ? "bg-success" : null}>
         <th scope="row">{indx + 1}</th>
         <td>{value.category}</td>
       </tr>

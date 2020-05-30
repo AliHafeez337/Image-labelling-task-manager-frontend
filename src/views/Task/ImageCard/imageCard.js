@@ -10,7 +10,10 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
+// import Annotorious from 'annotorious';
+
 import { apiURL } from '../../../config';
+// import an from './annotorious';
 
 const styles = {
   cardCategoryWhite: {
@@ -36,8 +39,43 @@ const useStyles = makeStyles(styles);
 const ImageCard = (props) => {
   const classes = useStyles();
   // console.log(props.photo)
+
+  var loadScript = function(src) {
+    var tag = document.createElement('script');
+    tag.async = false;
+    tag.src = src;
+    document.getElementsByTagName('body').appendChild(tag);
+  }
+  
+  const fun = () => {
+    loadScript('../../../assets/annotorious.min.js')
+    // var anno = Annotorious.init({
+    //   image: 'annotorious-Labels'
+    // });
+    
+    // anno.on('selectAnnotation', function(annotation) {
+    //   console.log('selected', annotation);
+    // });
+
+    // anno.on('createAnnotation', function(a) {
+    //   console.log('created', a);
+    // });
+
+    // anno.on('updateAnnotation', function(annotation, previous) {
+    //   console.log('updated', previous, 'with', annotation);
+    // });
+
+    // anno.on('deleteAnnotation', function(annotation) {
+    //   console.log('deleted', annotation);
+    // });
+    
+    // anno.loadAnnotations('annotations.w3c.json');
+  }
+  
   return (
     <div>
+      {/* <script type="text/javascript" src="../../../assets/annotorious.min.js"></script> */}
+      {/* {fun()} */}
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
@@ -47,7 +85,9 @@ const ImageCard = (props) => {
             </CardHeader>
             <CardBody>
               <img 
+              id = "annotorious-Labels"
               src = {apiURL + '/' + props.photo.url} 
+              alt = "To be labelled..."
               width = '100%'
               height = '100%'
               />
