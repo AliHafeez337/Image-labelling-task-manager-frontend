@@ -1,9 +1,10 @@
 import axios from 'axios'
 import initialState from './store/initialState'
+import { apiURL } from './config'
 
-const baseURL = 'http://localhost:3100'
+// const baseURL = 'http://localhost:3100'
 
-axios.defaults.baseURL = baseURL
+axios.defaults.baseURL = apiURL
 
 axios.defaults.headers.common['Authorization'] = 'bearer ' + initialState.token
 

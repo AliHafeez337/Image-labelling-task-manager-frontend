@@ -29,6 +29,7 @@ import Assignment from "@material-ui/icons/Assignment";
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
+import Task from 'views/Task/task'
 
 const dashboardRoutes = [
   {
@@ -42,7 +43,7 @@ const dashboardRoutes = [
     path: "/task",
     name: "Recent Task",
     icon: Assignment,
-    component: DashboardPage,
+    component: Task,
     layout: "/admin"
   },
   {
