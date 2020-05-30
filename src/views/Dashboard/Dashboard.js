@@ -1,6 +1,7 @@
 import React from "react";
 // react plugin for creating charts
 import ChartistGraph from "react-chartist";
+
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
 import Icon from "@material-ui/core/Icon";
@@ -42,9 +43,16 @@ import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js"
 const useStyles = makeStyles(styles);
 
 export default function Dashboard(props) {
+  // var redirect = null
+  // if(localStorage.getItem('token') === null){
+  //   console.log('Token not found.')
+  //   props.history.push('../login')
+  //   // redirect = <Redirect to="/login" />
+  // }
   const classes = useStyles();
   return (
     <div>
+      {/* {redirect} */}
       <GridContainer>
         <GridItem xs={12} sm={6} md={3}>
           <Card>

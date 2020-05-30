@@ -1,5 +1,6 @@
 import React from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { Switch, Route, Redirect, withRouter } from "react-router-dom";
+
 // creates a beautiful scrollbar
 import PerfectScrollbar from "perfect-scrollbar";
 import "perfect-scrollbar/css/perfect-scrollbar.css";
@@ -40,7 +41,12 @@ const switchRoutes = (
 
 const useStyles = makeStyles(styles);
 
-export default function Admin({ ...rest }) {
+const AdminComponent = function Admin({ ...rest }) {
+  if(localStorage.getItem('token') === null){
+    console.log('Token not found.')
+    rest.history.push('../login')
+  }
+
   // styles
   const classes = useStyles();
   // ref to help us initialize PerfectScrollbar on windows devices
@@ -63,6 +69,12 @@ export default function Admin({ ...rest }) {
       setMobileOpen(false);
     }
   };
+  // const redir = () => {
+  //   if(localStorage.getItem('token') === null){
+  //     console.log('Token not found.')
+  //     return true
+  //   }
+  // }
   // initialize and destroy the PerfectScrollbar plugin
   React.useEffect(() => {
     if (navigator.platform.indexOf("Win") > -1) {
@@ -83,6 +95,7 @@ export default function Admin({ ...rest }) {
   }, [mainPanel]);
   return (
     <div className={classes.wrapper}>
+      {/* {redir() ? <Redirect to="/login" /> : null} */}
       <Sidebar
         routes={routes}
         logoText={"Creative Tim"}
@@ -112,3 +125,5 @@ export default function Admin({ ...rest }) {
     </div>
   );
 }
+
+export default withRouter(AdminComponent)

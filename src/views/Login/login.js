@@ -1,5 +1,7 @@
 import React, {Component} from "react";
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // core components
@@ -69,6 +71,7 @@ class Login extends Component {
           localStorage.setItem("email",res.data.user.email);
           localStorage.setItem("archived",res.data.user.archived);
           localStorage.setItem("usertype",res.data.user.usertype);
+          this.props.onTokenGet(res.data.token)
           setTimeout(() => {
             this.props.history.push(`/admin/dashboard`)
           }, 500)
@@ -121,4 +124,17 @@ class Login extends Component {
     );
   }
 }
-export default Login
+
+// const mapStoreToProps = state => {
+//   return {
+//     token
+//   }
+// }
+
+const mapPropsToDispatch = dispatch => {
+  return {
+    onTokenGet: (token) => dispatch({type: 'SETTOKEN', token})
+  }
+}
+
+export default connect(null, mapPropsToDispatch)(Login)

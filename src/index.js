@@ -38,14 +38,18 @@ import reducer from './store/reducer';
 
 const store = createStore(reducer);
 const hist = createBrowserHistory();
-console.log(localStorage.getItem('token'))
+
+const getToken  = () => {
+  return localStorage.getItem('token') === null
+}
+
 ReactDOM.render(
   <Provider store = { store }>
     <Router history={hist}>
       <Switch>
         <Route path="/admin" component={Admin} />
-        {localStorage.getItem('token') == null ? <Route path="/login" component={Login} /> : <Redirect to="/admin/dashboard" />}
-        {localStorage.getItem('token') == null ? <Route path="/signup" component={SingUp} /> : <Redirect to="/admin/dashboard" />}
+        {getToken() ? <Route path="/login" component={Login} /> : <Redirect to="/admin/dashboard" />}
+        {getToken() ? <Route path="/signup" component={SingUp} /> : <Redirect to="/admin/dashboard" />}
         <Redirect from="/" to="/admin/dashboard" />
       </Switch>
     </Router>
