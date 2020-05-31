@@ -4,6 +4,7 @@ import LabelsCard from "./Labels/labels"
 import CategoriesCard from "./LabelCategories/categories"
 import Button from "components/CustomButtons/Button.js";
 
+// import { Annotorious } from '@recogito/annotorious';
 // import {appendScript} from 'utils/appendScript'
 import axios from '../../axiosSet'
 
@@ -27,10 +28,11 @@ class Task extends React.Component {
     script.src = "/annotorious.min.js";
     script.async = true;
     document.body.appendChild(script);
-    // script = document.createElement("script");
-    // script.src = "/ann.js";
-    // script.async = true;
-    // document.body.appendChild(script);
+
+    script = document.createElement("script");
+    script.src = "/ann.js";
+    script.async = true;
+    document.body.appendChild(script);
     // appendScript("/annotorious.min.js");
     // appendScript("/ann.js");
 

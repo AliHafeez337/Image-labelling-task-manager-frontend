@@ -10,7 +10,9 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
-// import Annotorious from 'annotorious';
+// import { Annotorious } from '@recogito/annotorious';
+import { Annotation } from 'react-image-annotation';
+
 
 import { apiURL } from '../../../config';
 // import an from './annotorious';
@@ -36,19 +38,26 @@ const styles = {
 
 const useStyles = makeStyles(styles);
 
+
 const ImageCard = (props) => {
   const classes = useStyles();
   // console.log(props.photo)
 
-  var loadScript = function(src) {
-    var tag = document.createElement('script');
-    tag.async = false;
-    tag.src = src;
-    document.getElementsByTagName('body').appendChild(tag);
+  // var loadScript = function(src) {
+  //   var tag = document.createElement('script');
+  //   tag.async = false;
+  //   tag.src = src;
+  //   document.getElementsByTagName('body').appendChild(tag);
+  // }
+  
+  // const anno = new Annotorious({ image: 'annotoriousLabels' });
+  if (props.photo.url){
   }
   
+
   const fun = () => {
-    loadScript('../../../assets/annotorious.min.js')
+    // loadScript('../../../assets/annotorious.min.js')
+    // console.log(Annotorious)
     // var anno = Annotorious.init({
     //   image: 'annotorious-Labels'
     // });
@@ -75,7 +84,7 @@ const ImageCard = (props) => {
   return (
     <div>
       {/* <script type="text/javascript" src="../../../assets/annotorious.min.js"></script> */}
-      {/* {fun()} */}
+      {fun()}
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
@@ -84,13 +93,25 @@ const ImageCard = (props) => {
               <p className={classes.cardCategoryWhite}>Please label the picture below.</p>
             </CardHeader>
             <CardBody>
-              <img 
-              id = "annotorious-Labels"
+              {/* <Annotation
+                src={apiURL + '/' + props.photo.url}
+                alt='Two pebbles anthropomorphized holding hands'
+
+                annotations={this.state.annotations}
+
+                type={this.state.type}
+                value={this.state.annotation}
+                onChange={this.onChange}
+                onSubmit={this.onSubmit}
+              /> */}
+              {/* <img 
+              className = "annotatable"
+              id = "annotoriousLabels"
               src = {apiURL + '/' + props.photo.url} 
               alt = "To be labelled..."
               width = '100%'
               height = '100%'
-              />
+              /> */}
             </CardBody>
             <CardFooter>
               <Button color="success">Save Changes</Button>
