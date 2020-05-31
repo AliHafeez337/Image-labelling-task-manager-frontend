@@ -7,7 +7,6 @@
   "dependencies": {
     "@material-ui/core": "4.3.2",
     "@material-ui/icons": "4.2.1",
-    "@recogito/annotorious": "^2.0.2-beta",
     "annotorious": "^0.6.4",
     "axios": "^0.19.2",
     "bootstrap": "^4.5.0",
@@ -23,7 +22,7 @@
     "react-chartist": "0.13.3",
     "react-dom": "16.9.0",
     "react-google-maps": "9.4.5",
-    "react-image-annotation": "^0.9.10",
+    "react-picture-annotation": "1.0.1",
     "react-redux": "^7.2.0",
     "react-router-dom": "5.0.1",
     "react-scripts": "3.1.0",

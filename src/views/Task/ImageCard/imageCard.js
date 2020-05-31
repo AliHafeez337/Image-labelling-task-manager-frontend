@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // core components
@@ -10,9 +10,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
-// import { Annotorious } from '@recogito/annotorious';
-import { Annotation } from 'react-image-annotation';
-
+import { ReactPictureAnnotation } from "react-picture-annotation";
 
 import { apiURL } from '../../../config';
 // import an from './annotorious';
@@ -36,55 +34,69 @@ const styles = {
   }
 };
 
+const arrVar = [
+  {
+    comment: "face",
+    id: "mP2KXX",
+    mark: {
+      height: 246.2595658285179,
+      type: "RECT",
+      width: -246.25956582851788,
+      x: 430.9800580977667,
+      y: 84.80630579415902
+    }
+  },
+  {
+    comment: "haha",
+    id: "mP2KXY",
+    mark: {
+      height: 246.2595658285179,
+      type: "RECT",
+      width: -150.25956582851788,
+      x: 330.9800580977667,
+      y: 184.80630579415902
+    }
+  }
+]
+
 const useStyles = makeStyles(styles);
 
 
 const ImageCard = (props) => {
+  // const [pageSize, setPageSize] = useState({
+  const [, setPageSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight
+  });
+
+  // console.log(pageSize.width)
+  // console.log(pageSize.height)
+  // console.log(props.selectedLabel)
+
+  const onResize = () => {
+    setPageSize({ width: window.innerWidth, height: window.innerHeight });
+  };
+
+  useEffect(() => {
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  const onSelect = selectedId => console.log(selectedId);
+  const onChange = data => console.log(data);
+
   const classes = useStyles();
-  // console.log(props.photo)
 
-  // var loadScript = function(src) {
-  //   var tag = document.createElement('script');
-  //   tag.async = false;
-  //   tag.src = src;
-  //   document.getElementsByTagName('body').appendChild(tag);
-  // }
-  
-  // const anno = new Annotorious({ image: 'annotoriousLabels' });
-  if (props.photo.url){
+  try{
+    console.log(props.photo._id)
+    console.log(props.taskId)
+    console.log(props.selectedLabelObject._id)
   }
-  
+  catch(e){}
 
-  const fun = () => {
-    // loadScript('../../../assets/annotorious.min.js')
-    // console.log(Annotorious)
-    // var anno = Annotorious.init({
-    //   image: 'annotorious-Labels'
-    // });
-    
-    // anno.on('selectAnnotation', function(annotation) {
-    //   console.log('selected', annotation);
-    // });
-
-    // anno.on('createAnnotation', function(a) {
-    //   console.log('created', a);
-    // });
-
-    // anno.on('updateAnnotation', function(annotation, previous) {
-    //   console.log('updated', previous, 'with', annotation);
-    // });
-
-    // anno.on('deleteAnnotation', function(annotation) {
-    //   console.log('deleted', annotation);
-    // });
-    
-    // anno.loadAnnotations('annotations.w3c.json');
-  }
-  
   return (
     <div>
       {/* <script type="text/javascript" src="../../../assets/annotorious.min.js"></script> */}
-      {fun()}
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
@@ -93,25 +105,28 @@ const ImageCard = (props) => {
               <p className={classes.cardCategoryWhite}>Please label the picture below.</p>
             </CardHeader>
             <CardBody>
-              {/* <Annotation
-                src={apiURL + '/' + props.photo.url}
-                alt='Two pebbles anthropomorphized holding hands'
-
-                annotations={this.state.annotations}
-
-                type={this.state.type}
-                value={this.state.annotation}
-                onChange={this.onChange}
-                onSubmit={this.onSubmit}
-              /> */}
-              {/* <img 
-              className = "annotatable"
-              id = "annotoriousLabels"
-              src = {apiURL + '/' + props.photo.url} 
-              alt = "To be labelled..."
-              width = '100%'
-              height = '100%'
-              /> */}
+              {
+                props.selectedLabelObject ? 
+                <ReactPictureAnnotation
+                  image = {apiURL + '/' + props.photo.url}
+                  onSelect = {onSelect}
+                  onChange = {onChange}
+                  width = {500}
+                  height = {800}
+                  // width={pageSize.width}
+                  // height={pageSize.height}
+                  annotationData = {arrVar}
+                />
+                :
+                <img 
+                  className = "annotatable"
+                  id = "annotoriousLabels"
+                  src = {apiURL + '/' + props.photo.url} 
+                  alt = "To be labelled..."
+                  width = '100%'
+                  height = '100%'
+                />  
+              }
             </CardBody>
             <CardFooter>
               <Button color="success">Save Changes</Button>
