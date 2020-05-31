@@ -40,6 +40,12 @@ const AdminNavbarLinks = (props) => {
   const handleCloseProfile = () => {
     setOpenProfile(null);
   };
+  const handleGoToProfile = () => {
+    setTimeout(() => {
+      setOpenProfile(null);
+      props.history.push('/admin/user')
+    }, 100)
+  };
   const handleLogoutFunction = () => {
     axios.get('/user/logout')
       .then(res => {
@@ -121,16 +127,10 @@ const AdminNavbarLinks = (props) => {
                 <ClickAwayListener onClickAway={handleCloseProfile}>
                   <MenuList role="menu">
                     <MenuItem
-                      onClick={handleCloseProfile}
+                      onClick={handleGoToProfile}
                       className={classes.dropdownItem}
                     >
                       Profile
-                    </MenuItem>
-                    <MenuItem
-                      onClick={handleCloseProfile}
-                      className={classes.dropdownItem}
-                    >
-                      Settings
                     </MenuItem>
                     <Divider light />
                     <MenuItem
