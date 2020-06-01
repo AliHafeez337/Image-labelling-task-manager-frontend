@@ -12,6 +12,7 @@ class Task extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      taskId: '',
       task: {},
       thisPicture: {},
       thisPictureIndex: null,
@@ -25,10 +26,18 @@ class Task extends React.Component {
     }
   }
   componentDidMount() {
+
+    // const script = document.createElement("script");
+    // script.src = "./a.js";
+    // script.async = true;
+    // document.body.appendChild(script);
+
     // console.log(this.ref)
-    
-    // axios.get('/task/5ed20b50d052443ddc52963e')
-    axios.get('/task/' + this.props.taskId)
+    console.log(this.props.taskId)
+    // if (this.props.taskId){
+
+      axios.get('/task/5ed20b50d052443ddc52963e')
+      // axios.get('/task/' + this.props.taskId)
       .then(res => {
         this.setState({ task: res.data })
         if (res.data.photos[0]){
@@ -53,6 +62,7 @@ class Task extends React.Component {
         })
         this.getPicture(this.state.thisPicture._id)
       })
+    // }
   }
   getPicture = id => {
     axios.get('/label/picture/'+ id)
@@ -151,9 +161,12 @@ class Task extends React.Component {
 }
 
 const mapStoreToProps = state => {
-  return {
+  const a = {
     taskId: state.recentTaskId
   }
+  // console.log(a.taskId)
+
+  return a
 }
 
 export default connect(mapStoreToProps, null)(Task);

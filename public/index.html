@@ -67,16 +67,7 @@
           Learn how to configure a non-root public URL by running `npm run build`.
         -->
     <title>Image Labelling Task Manager</title>
-    <!-- <link rel="stylesheet" href="annotorious.css" /> -->
-    <!-- <style>
-      @import url("annotorious.css");
-    </style> -->
-    <!-- <script type="text/javascript" src="../src/assets/annotorious.min.js"></script> -->
-    <!-- <script>
-      function init() {
-        anno.makeAnnotatable(document.getElementById('annotoriousLabels')); 
-      }
-    </script> -->
+    <script src="https://recogito.github.io/annotorious/annotorious.min.js"></script>
   </head>
   <body>
     <noscript> You need to enable JavaScript to run this app. </noscript>
@@ -91,32 +82,5 @@
           To begin the development, run `npm start` or `yarn start`.
           To create a production bundle, use `npm run build` or `yarn build`.
         -->
-      
-    <!-- <script>
-      (function() {
-        console.log(Annotorious)
-        var anno = Annotorious.init({
-          image: 'hallstatt'
-        });
-        
-        anno.on('selectAnnotation', function(annotation) {
-          console.log('selected', annotation);
-        });
-
-        anno.on('createAnnotation', function(a) {
-          console.log('created', a);
-        });
-
-        anno.on('updateAnnotation', function(annotation, previous) {
-          console.log('updated', previous, 'with', annotation);
-        });
-
-        anno.on('deleteAnnotation', function(annotation) {
-          console.log('deleted', annotation);
-        });
-        
-        anno.loadAnnotations('annotations.w3c.json');
-      })()
-    </script>   -->
   </body>
 </html>

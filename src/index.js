@@ -18,7 +18,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { createBrowserHistory } from "history";
-import { Router, Route, Switch, Redirect } from "react-router-dom";
+import { Router, Route, Switch, Redirect, BrowserRouter } from "react-router-dom";
 
 // core components
 import Admin from "layouts/Admin.js";
@@ -46,14 +46,18 @@ const getToken  = () => {
 
 ReactDOM.render(
   <Provider store = { store }>
-    <Router history={hist}>
-      <Switch>
-        <Route path="/admin" component={Admin} />
-        {getToken() ? <Route path="/login" component={Login} /> : <Redirect to="/admin/dashboard" />}
-        {getToken() ? <Route path="/signup" component={SingUp} /> : <Redirect to="/admin/dashboard" />}
-        <Redirect from="/" to="/admin/dashboard" />
-      </Switch>
-    </Router>
+    <BrowserRouter>
+      {/* <Router history={hist}> */}
+        <Switch>
+          <Route path="/admin" component={Admin} />
+          <Route path="/login" component={Login} />
+          <Route path="/signup" component={SingUp} />
+          {/* {getToken() ? <Route path="/login" component={Login} /> : <Redirect to="/admin/dashboard" />}
+          {getToken() ? <Route path="/signup" component={SingUp} /> : <Redirect to="/admin/dashboard" />} */}
+          <Redirect from="/" to="/admin/dashboard" />
+        </Switch>
+      {/* </Router> */}
+    </BrowserRouter>
   </Provider>,
   document.getElementById("root")
 );
