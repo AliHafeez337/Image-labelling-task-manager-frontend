@@ -17,8 +17,8 @@
 */
 import React from "react";
 import ReactDOM from "react-dom";
-import { createBrowserHistory } from "history";
-import { Router, Route, Switch, Redirect, BrowserRouter } from "react-router-dom";
+// import { createBrowserHistory } from "history";
+import { Route, Switch, Redirect, BrowserRouter } from "react-router-dom";
 
 // core components
 import Admin from "layouts/Admin.js";
@@ -38,11 +38,11 @@ import { Provider } from 'react-redux';
 import reducer from './store/reducer';
 
 const store = createStore(reducer);
-const hist = createBrowserHistory();
+// const hist = createBrowserHistory();
 
-const getToken  = () => {
-  return localStorage.getItem('token') === null
-}
+// const getToken  = () => {
+//   return localStorage.getItem('token') === null
+// }
 
 ReactDOM.render(
   <Provider store = { store }>

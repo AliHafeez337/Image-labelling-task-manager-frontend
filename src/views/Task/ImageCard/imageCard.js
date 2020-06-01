@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // core components
@@ -9,13 +9,6 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-
-import { ReactPictureAnnotation } from "react-picture-annotation";
-// import { Annotorious } from '@recogito/annotorious/src';
-// import ReactImageAnnotate from "react-image-annotate"
-// @import url("https://rsms.me/inter/inter.css");
-import {TwoDimensionalImage} from "react-annotation-tool";
-import myData from './annotations.w3c.json';
 
 import { apiURL } from '../../../config';
 
@@ -38,77 +31,9 @@ const styles = {
   }
 };
 
-// const arrVar = [
-//   {
-//     comment: "face",
-//     id: "mP2KXX",
-//     mark: {
-//       height: 246.2595658285179,
-//       type: "RECT",
-//       width: -246.25956582851788,
-//       x: 430.9800580977667,
-//       y: 84.80630579415902
-//     }
-//   },
-//   {
-//     comment: "haha",
-//     id: "mP2KXY",
-//     mark: {
-//       height: 246.2595658285179,
-//       type: "RECT",
-//       width: -150.25956582851788,
-//       x: 330.9800580977667,
-//       y: 184.80630579415902
-//     }
-//   }
-// ]
-
-
 const useStyles = makeStyles(styles);
 
-
 const ImageCard = (props) => {
-//   const options = {id: "0", value: "root", children: [
-//     {id: "1", value: "Head", children: [
-//        {id: "1-1", value: "Lips", children: []}, 
-//        {id: "1-2", value: "Tongue", children: []}
-//     ]},
-//     {id: "2", value: "Arm", children: [
-//       {id: "2-1", value: "Hand", children: []}, 
-//     ]},
-//     {id: "3", value: "Leg", children: [
-//       {id: "3-1", value: "Foot", children: []}, 
-//       {id: "3-2", value: "Knee", children: []}
-//     ]}
-//  ]}
-
-  // const anno = new Annotorious({ image: 'annotoriousLabels' });
-  // const script = document.createElement("script");
-  // script.src = './a.js';
-  // script.async = true;
-  // document.body.appendChild(script);
-
-  // const [pageSize, setPageSize] = useState({
-  // const [, setPageSize] = useState({
-  //   width: window.innerWidth,
-  //   height: window.innerHeight
-  // });
-
-  // console.log(pageSize.width)
-  // console.log(pageSize.height)
-  // console.log(props.selectedLabel)
-
-  // const onResize = () => {
-  //   setPageSize({ width: window.innerWidth, height: window.innerHeight });
-  // };
-
-  // useEffect(() => {
-  //   window.addEventListener("resize", onResize);
-  //   return () => window.removeEventListener("resize", onResize);
-  // }, []);
-
-  // const onSelect = selectedId => console.log(selectedId);
-  // const onChange = data => console.log(data);
 
   var annBody = [{
       "type": "TextualBody",
@@ -127,7 +52,7 @@ const ImageCard = (props) => {
   ]
 
   const Annotorious = window.Annotorious
-  console.log(Annotorious);
+  // console.log(Annotorious);
   // setTimeout(() => {
   //   // const anno = new Annotorious({ image: 'annotoriousLabels' });
   //   var anno = Annotorious.init({
@@ -193,49 +118,6 @@ const ImageCard = (props) => {
                 width = '100%'
                 height = '100%'
               />  
-              {/* {
-                props.selectedLabelObject ? 
-                
-                // <ReactPictureAnnotation
-                //   image = {apiURL + '/' + props.photo.url}
-                //   onSelect = {onSelect}
-                //   onChange = {onChange}
-                //   width = {500}
-                //   height = {800}
-                //   // width={pageSize.width}
-                //   // height={pageSize.height}
-                //   annotationData = {arrVar}
-                // />
-                
-                // <ReactImageAnnotate
-                //   selectedImage={apiURL + '/' + props.photo.url}
-                //   taskDescription="# Draw region around each face\n\nInclude chin and hair."
-                //   images={[{ src: "http://localhost:3100/5ed20b50d052443ddc52963e/1590824002588.JPG-DSC_0005 (3).JPG", name: "Image 1" }]}
-                //   regionClsList={["Man Face", "Woman Face"]}
-                // />
-
-                // <TwoDimensionalImage
-                //   url = {apiURL + '/' + props.photo.url}
-                //   className = 'annotatable'
-                //   hasSkipButton = {true}
-                //   onSkipClick = {onChange}
-                //   isLabelOn = {true}
-                //   isDynamicOptionsEnable = {true}
-                //   options = {options}
-                //   isDynamicOptionsEnable = {false}
-                //   // isViewOnlyMode = {true}
-                //   disabledOptionLevels = "1"
-                // />
-                :
-                <img 
-                  className = "annotatable"
-                  id = "toBeLabelled"
-                  src = {apiURL + '/' + props.photo.url} 
-                  alt = "To be labelled..."
-                  width = '100%'
-                  height = '100%'
-                />  
-              } */}
             </CardBody>
             <CardFooter>
               <Button color="success">Save Changes</Button>
@@ -243,17 +125,6 @@ const ImageCard = (props) => {
           </Card>
         </GridItem>
       </GridContainer>
-      {/* <script type="text/javascript" src="./a.js"></script> */}
-      {/* <script>
-        (function() {
-          console.log('aaa', window.Annotorious)
-          // var anno = Annotorious.init({
-          //   image: 'hallstatt'
-          // });
-
-          // anno.loadAnnotations('annotations.w3c.json');
-        })()
-      </script> */}
     </div>
   );
 }

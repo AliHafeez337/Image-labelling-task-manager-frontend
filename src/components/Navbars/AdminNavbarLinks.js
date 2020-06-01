@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
-import { withRouter, Link } from "react-router-dom";
+import { withRouter } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
 
 // @material-ui/core components
