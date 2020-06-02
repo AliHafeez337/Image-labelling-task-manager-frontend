@@ -49,12 +49,12 @@ ReactDOM.render(
     <BrowserRouter>
       {/* <Router history={hist}> */}
         <Switch>
-          <Route path="/admin" component={Admin} />
+          <Route path="/l" component={Admin} />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={SingUp} />
           {/* {getToken() ? <Route path="/login" component={Login} /> : <Redirect to="/admin/dashboard" />}
           {getToken() ? <Route path="/signup" component={SingUp} /> : <Redirect to="/admin/dashboard" />} */}
-          <Redirect from="/" to="/admin/dashboard" />
+          <Redirect from="/" to="/l/dashboard" />
         </Switch>
       {/* </Router> */}
     </BrowserRouter>

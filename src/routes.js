@@ -31,28 +31,28 @@ import DashboardPage from "views/Dashboard/Dashboard.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
 import Task from 'views/Task/task'
 
-const dashboardRoutes = [
+const adminDashboardRoutes = [
   {
     path: "/dashboard",
     name: "Dashboard",
     icon: Dashboard,
     component: DashboardPage,
-    layout: "/admin"
+    layout: "/l"
   },
   {
     path: "/task",
     name: "Recent Task",
     icon: Assignment,
     component: Task,
-    layout: "/admin"
+    layout: "/l"
   },
   {
     path: "/user",
     name: "User Profile",
     icon: Person,
     component: UserProfile,
-    layout: "/admin"
+    layout: "/l"
   }
 ];
 
-export default dashboardRoutes;
+export default adminDashboardRoutes;
