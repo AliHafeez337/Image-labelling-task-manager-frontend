@@ -22,7 +22,8 @@ class Task extends React.Component {
       labelObjects: [],
       selectedLabelObject: null,
       selectedLabel: null,
-      labels: []
+      labels: [],
+      annoDuplicateInstance: null,
     }
   }
   componentDidMount() {
@@ -71,29 +72,49 @@ class Task extends React.Component {
       this.setState({ labels: res.data })
     })
   }
+  checkOldAnnoInstance = () => {
+    // console.log(this.state.annoDuplicateInstance)
+    if (this.state.annoDuplicateInstance){
+      this.state.annoDuplicateInstance.destroy()
+      this.setState({
+        selectedLabelObject: null,
+        selectedLabel: null
+      })
+    }
+  }
   nextPictureHandler = () => {
+    this.checkOldAnnoInstance()
     if (this.state.task.photos[this.state.thisPictureIndex + 1]){
+      this.getPicture(this.state.task.photos[this.state.thisPictureIndex + 1]._id)
       this.setState({
         thisPicture: this.state.task.photos[this.state.thisPictureIndex + 1],
         thisPictureIndex: this.state.thisPictureIndex + 1
       })
-      this.getPicture(this.state.task.photos[this.state.thisPictureIndex + 1]._id)
     }
   }
   previousPictureHandler = () => {
+    this.checkOldAnnoInstance()
+    
     if (this.state.task.photos[this.state.thisPictureIndex - 1]){
+      this.getPicture(this.state.task.photos[this.state.thisPictureIndex - 1]._id)
       this.setState({
         thisPicture: this.state.task.photos[this.state.thisPictureIndex - 1],
         thisPictureIndex: this.state.thisPictureIndex - 1
       })
-      this.getPicture(this.state.task.photos[this.state.thisPictureIndex - 1]._id)
     }
   }
   handleCategory = (value, index) => {
+    this.checkOldAnnoInstance()
+    if (this.state.selectedCategory !== index){
+      this.setState({ 
+        selectedLabel: null,
+        selectedLabelObject: null
+      })
+    }
     this.setState({ selectedCategory: index})
     var tempArr = []
     this.state.task.labels.forEach((val) =>{
-      console.log(val.category)
+      // console.log(val.category)
       if (val.category === value.category){
         tempArr.push(val)
       }
@@ -101,10 +122,20 @@ class Task extends React.Component {
     this.setState({ labelObjects: tempArr })
   }
   handleLabelName = (value, index) => {
+    this.checkOldAnnoInstance()
     this.setState({ 
       selectedLabel: index,
       selectedLabelObject: value
     })
+  }
+  handleLabellingDone = () => {
+    this.setState({ 
+      selectedLabel: null,
+      selectedLabelObject: null
+    })
+  }
+  handleAnnoInstance = (anno) => {
+    this.state.annoDuplicateInstance = anno
   }
   render() {
     return (
@@ -118,6 +149,8 @@ class Task extends React.Component {
               labels = { this.state.labels }
               selectedLabelObject = { this.state.selectedLabelObject }
               taskId = { this.state.task._id }
+              done = { this.handleLabellingDone }
+              anno = { this.handleAnnoInstance }
             ></ImageCard>
           </div>
           <div className="col-lg-4 col-md-4">

@@ -10,6 +10,7 @@ import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
+import axios from '../../../axiosSet'
 import { apiURL } from '../../../config';
 
 const styles = {
@@ -35,21 +36,13 @@ const useStyles = makeStyles(styles);
 
 const ImageCard = (props) => {
 
-  var annBody = [{
-      "type": "TextualBody",
-      "purpose": "commenting",
-      "value": "These are lips..."
-    }
-    , {
-      "type": "TextualBody",
-      "purpose": "tagging",
-      "value": "Lips"
-    }, {
-      "type": "TextualBody",
-      "purpose": "tagging",
-      "value": "Face"
-    }
-  ]
+  // try{
+  //   console.log(apiURL + '/' + props.photo.url)
+  //   console.log(props.photo)
+  //   console.log(props.taskId)
+  //   console.log(props.selectedLabelObject)
+  // }
+  // catch(e){}
 
   const Annotorious = window.Annotorious
   // console.log(Annotorious);
@@ -62,43 +55,121 @@ const ImageCard = (props) => {
   // }, 2000)
 
   if (props.selectedLabelObject){
+
+    var annBody = [
+      // {
+      //   "type": "TextualBody",
+      //   "purpose": "commenting",
+      //   "value": "These are lips..."
+      // },
+      {
+        "type": "TextualBody",
+        "purpose": "tagging",
+        "value": props.selectedLabelObject.category
+      }, {
+        "type": "TextualBody",
+        "purpose": "tagging",
+        "value": props.selectedLabelObject.name
+      }
+    ]
+    
     var anno = Annotorious.init({
       image: 'annotoriousLabels'
     });
+    props.anno(anno)
     
-    anno.loadAnnotations('http://localhost:3100/label/picture/5ed3bab2b5d460542ce12081').then(function(annotations) {
+    // console.log(props.photo._id)
+    anno.loadAnnotations('http://localhost:3100/label/picture/' + props.photo._id).then(function(annotations) {
       // Do something
       console.log(annotations)
     });
     
-    anno.applyTemplate(annBody, false)
+    axios.get('/label/picture/' + props.photo._id)
+      .then(res => {
+        console.log(res.data)
+        for (let i = 0; i < res.data.length; i++){
+          console.log(res.data[i].label)
+          console.log(props.selectedLabelObject._id)
+          if (res.data[i].label == props.selectedLabelObject._id){
+            console.log('Selected Annotation', res.data[i])
+            
+            anno.selectAnnotation(res.data[i].id)
+            break
+          }
+        }
+      }
+    )
+    
+    anno.applyTemplate(annBody, true)
     
     anno.on('selectAnnotation', function(annotation) {
       console.log('selected', annotation);
     });
 
-    anno.on('createAnnotation', function(a) {
-      console.log('created', a);
+    anno.on('createAnnotation', function(annotation) {
+      // console.log('created', annotation);
+      var obj = {
+        task: props.taskId,
+        label: props.selectedLabelObject._id,
+        picture: props.photo._id,
+        '@context': "http://www.w3.org/ns/anno.jsonld",
+        id: annotation.id,
+        type: annotation.type,
+        body: annotation.body,
+        target: annotation.target
+      }
+      console.log('created', obj)
+      axios.post('/label/add', obj)
+        .then(res => {
+          // props.done()
+          // anno.destroy()
+        })
     });
 
     anno.on('updateAnnotation', function(annotation, previous) {
-      console.log('updated', previous, 'with', annotation);
+      // console.log('updated', previous, 'with', annotation);
+      var obj = {
+        task: props.taskId,
+        label: props.selectedLabelObject._id,
+        picture: props.photo._id,
+        '@context': "http://www.w3.org/ns/anno.jsonld",
+        id: annotation.id,
+        type: annotation.type,
+        body: annotation.body,
+        target: annotation.target
+      }
+      console.log('updated', previous, 'with', obj)
+      axios.post('/label/add', obj)
+        .then(res => {
+          // props.done()
+          // anno.destroy()
+        })
     });
 
     anno.on('deleteAnnotation', function(annotation) {
       console.log('deleted', annotation);
+      var obj = {
+        task: props.taskId,
+        label: props.selectedLabelObject._id,
+        picture: props.photo._id,
+        '@context': "http://www.w3.org/ns/anno.jsonld",
+        id: annotation.id,
+        type: annotation.type,
+        body: annotation.body,
+        target: annotation.target
+      }
+      console.log('deleted', obj)
+      axios.delete('/label/delete', {
+          params: {id: obj.id}
+        })
+        .then(res => {
+          // props.done()
+          // anno.destroy()
+        })
     });
   }
 
   const classes = useStyles();
-
-  try{
-    console.log(apiURL + '/' + props.photo.url)
-    console.log(props.photo._id)
-    console.log(props.taskId)
-    console.log(props.selectedLabelObject._id)
-  }
-  catch(e){}
 
   return (
     <div>
@@ -120,7 +191,17 @@ const ImageCard = (props) => {
               />  
             </CardBody>
             <CardFooter>
-              <Button color="success">Save Changes</Button>
+              <p><b>Note:</b> Select a category first, then the label, after that you'll be able to label the picture.</p>
+              {/* <Button color="success">Save Changes</Button> */}
+            </CardFooter>
+            <CardFooter>
+              <p><b>Note:</b> Progress will be saved on each step so don't worry.</p>
+            </CardFooter>
+            <CardFooter>
+              <p><b>Note:</b> Upon every label click you'll see your old progress.</p>
+            </CardFooter>
+            <CardFooter>
+              <p><b>Note:</b> One label can ony have one annotation on one picture.</p>
             </CardFooter>
           </Card>
         </GridItem>
