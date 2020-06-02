@@ -11,7 +11,7 @@ import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import axios from '../../axiosSet';
 import SnackbarContent from "components/Snackbar/SnackbarContent.js";
-
+import {Progress} from 'reactstrap';
 import avatar from "assets/img/faces/marc1.jpg";
 class UserP extends React.Component {
   constructor(props) {
@@ -43,7 +43,10 @@ class UserP extends React.Component {
       succes:false,
       succesMsg:'',
       errr:false,
-      errrMsg:''
+      errrMsg:'',
+      imageInputAllow:false,
+      selectedFile: null,
+      imageSuccess:false
     }
   }
   data={name:'',
@@ -97,17 +100,91 @@ class UserP extends React.Component {
       });
     });    
   }
+  setImageInp(){
+    this.setState({imageInputAllow:true});
+  }
+  setImageInpN(){
+    this.setState({imageInputAllow:false});
+  }
+
+  checkMimeType=(event)=>{
+    //getting file object
+    let files = event.target.files[0] 
+    //define message container
+    let err = ''
+    // list allow mime type
+   const types = ['image/png', 'image/jpeg', 'image/gif']
+    // loop access array
+    if (types.every(type => files.type !== type)) {
+         // create error message and assign to container   
+         err += files.type+' is not a supported format\n';
+       }
+  
+   if (err !== '') { // if message not same old that mean has error 
+        event.target.value = null // discard selected file
+        console.log(err)
+         return false; 
+    }
+   return true;
+  
+  }
+
+  onChangeHandler=event=>{
+    if(this.checkMimeType(event)){ 
+      this.setState({
+        selectedFile: event.target.files[0],
+        loaded: 0,
+      })
+    }
+  }
+  onClickHandler = () => {
+    axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
+    console.log(this.state.selectedFile)
+    const data = new FormData() 
+    data.append('photo', this.state.selectedFile)
+    axios.patch("/userImage/add", data, {
+        onUploadProgress: ProgressEvent => {
+          this.setState({
+            loaded: (ProgressEvent.loaded / ProgressEvent.total*100),
+        })}
+      })
+      .then(res => {
+        console.log(res.data);
+        this.setState({imageSuccess:true});
+      })
+  }
   render() {
     const classes=makeStyles(this.state.styles);
     let notifi;
+    let imgInput;
     if(this.state.succes){
       notifi=<SnackbarContent message={'SUCCESS: '+this.state.succesMsg} close color="success"/>;
-    }else if(this.state.errr){
+    }
+    else if(this.state.imageSuccess){
+      notifi=<SnackbarContent message={'SUCCESS: '+'Updated Succesfully'} close color="danger"/>;
+    }
+    else if(this.state.errr){
       notifi=<SnackbarContent message={'Error: '+this.state.errrMsg} close color="danger"/>;
+    }
+    if(this.state.imageInputAllow){
+      console.log(this.state.imageInputAllow)
+      imgInput=<div className="form-group">
+        <input type="file" className="form-control" id="exampleInputImage" aria-describedby="emailHelp" onChange={this.onChangeHandler}/>
+        <Progress max="100" color="success" value={this.state.loaded} >{Math.round(this.state.loaded,2) }%</Progress>
+        <Button color="success" round onClick={()=>this.onClickHandler()}>
+        Upload
+        </Button>
+        <Button color="info" round onClick={()=>this.setImageInpN()}>
+        cancel
+        </Button>
+        </div>;
+    }else{
+      imgInput=<small></small>;
     }
     return (
       <div>
-        {notifi}<br/>
+        <br/>{notifi}<br/>
+        <br/>{this.notifi2}<br/>
         <GridContainer>
         <GridItem xs={12} sm={12} md={4}>
             <Card profile>
@@ -116,6 +193,16 @@ class UserP extends React.Component {
                   <img src={avatar} alt="..." />
                 </a>
               </CardAvatar>
+              <div>
+              {imgInput}<br/>
+              <Button color="primary" round onClick={()=>this.setImageInp()}>
+              Update Profile Picture
+              </Button>
+              <Button color="danger" round data-toggle="modal" data-target="#myModal">
+              Delete Profile Picture
+              </Button>
+              </div>
+              
               <CardBody profile>
                 <h6 className={classes.cardCategory}>{this.state.userProfile.name}</h6>
                 <h4 className={classes.cardTitle}>{this.state.userProfile.email}</h4>
