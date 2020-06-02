@@ -45,7 +45,7 @@ const AdminNavbarLinks = (props) => {
   const handleGoToProfile = () => {
     setTimeout(() => {
       setOpenProfile(null);
-      props.history.push('/admin/user')
+      props.history.push('/l/user')
     }, 100)
   };
   const handleLogoutFunction = () => {

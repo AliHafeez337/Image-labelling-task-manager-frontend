@@ -68,7 +68,7 @@ class Login extends Component {
       console.log(user);
       axios.post('/user/login', user)
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         if(res.data.msg){
           this.setState({errr:false});
           this.setState({succes:true});
@@ -87,7 +87,7 @@ class Login extends Component {
         else if(res.data.errmsg){
           this.setState({errr:true});
           this.setState({succes:false});
-          this.setState({errrMsg:res.data.errmsg[0].msg});
+          this.setState({errrMsg:res.data.errmsg});
         }
       });
     });
