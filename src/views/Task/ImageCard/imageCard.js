@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import Button from "components/CustomButtons/Button.js";
+// import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
@@ -90,7 +90,7 @@ const ImageCard = (props) => {
         for (let i = 0; i < res.data.length; i++){
           console.log(res.data[i].label)
           console.log(props.selectedLabelObject._id)
-          if (res.data[i].label == props.selectedLabelObject._id){
+          if (res.data[i].label === props.selectedLabelObject._id){
             console.log('Selected Annotation', res.data[i])
             
             anno.selectAnnotation(res.data[i].id)
