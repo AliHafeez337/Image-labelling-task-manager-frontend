@@ -17,6 +17,7 @@
 */
 // @material-ui/icons
 import Dashboard from "@material-ui/icons/Dashboard";
+import Home from "@material-ui/icons/Home";
 import Person from "@material-ui/icons/Person";
 import Assignment from "@material-ui/icons/Assignment";
 // import LibraryBooks from "@material-ui/icons/LibraryBooks";
@@ -28,6 +29,7 @@ import Assignment from "@material-ui/icons/Assignment";
 
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
+import HomePage from "views/Dashboard/Home.js"
 import UserProfile from "views/UserProfile/UserProfile.js";
 import Task from 'views/Task/task'
 
@@ -37,6 +39,13 @@ const adminDashboardRoutes = [
     name: "Dashboard",
     icon: Dashboard,
     component: DashboardPage,
+    layout: "/l"
+  },
+  {
+    path: "/home",
+    name: "Home",
+    icon: Home,
+    component: HomePage,
     layout: "/l"
   },
   {
