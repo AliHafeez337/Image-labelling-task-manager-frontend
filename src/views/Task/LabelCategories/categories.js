@@ -39,7 +39,7 @@ const CategoriesCard = (props) => {
       <tr 
         key = { indx } 
         onClick = { () => props.onSelectCategory(value, indx) }
-        className = { props.selectedCategory === indx ? "bg-success" : null}>
+        className = { props.selectedCategory === indx ? "bg-success text-white" : null}>
         <th scope="row">{indx + 1}</th>
         <td>{value.category}</td>
       </tr>

@@ -6,6 +6,11 @@ const reducer = (state = initialState, action) => {
       token: action.token
     }
   }
+  else if (action.type === 'SETTASK'){
+    return {
+      task: action.task
+    }
+  }
   return state;
 }
 

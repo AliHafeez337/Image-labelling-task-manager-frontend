@@ -4,23 +4,13 @@ import { Progress } from 'reactstrap';
 
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
-import Icon from "@material-ui/core/Icon";
+
 // @material-ui/icons
-import Store from "@material-ui/icons/Store";
-import Warning from "@material-ui/icons/Warning";
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
-import Table from "components/Table/Table.js";
-import Tasks from "components/Tasks/Tasks.js";
-import CustomTabs from "components/CustomTabs/CustomTabs.js";
-import Danger from "components/Typography/Danger.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
-import CardIcon from "components/Card/CardIcon.js";
 import CardBody from "components/Card/CardBody.js";
-import CardFooter from "components/Card/CardFooter.js";
-
-import Button from "components/CustomButtons/Button.js";
 
 import axios from '../../axiosSet'
 
@@ -47,7 +37,6 @@ class HomePage extends React.Component {
         }
       },
       mytasks: null,
-      selectedTask: null,
       rows: null,
     }
   }
@@ -58,12 +47,21 @@ class HomePage extends React.Component {
         console.log(res.data)
         this.setState({ mytasks: res.data })
         var rows = []
+        console.log(this.props.task)
         res.data.forEach((value, index) => {
           rows.push(
             <tr 
               key = { index } 
-              onClick = { () => this.setState({ selectedTask: value }) }
-              className = { this.state.selectedTask === value ? "bg-success d-flex" : "d-flex"}>
+              onClick = { () => this.handleRowSelect(value, index) }
+              className = { 
+                this.props.task ? 
+                  this.props.task._id === value._id ?
+                    "bg-secondary text-white d-flex" 
+                  :
+                    "d-flex"
+                : 
+                  "d-flex"
+                }>
               {/* <th className="col-1" scope="row">{index + 1}</th> */}
               <td className="col-2">{value.name}</td>
               <td className="col-3"><Progress max="100" color="success" value={value.percent}>{value.percent}%</Progress></td>
@@ -77,6 +75,16 @@ class HomePage extends React.Component {
         })
         this.setState({ rows })
       })
+  }
+
+  handleRowSelect = (value, index) => {
+    // console.log(value, index)
+    this.props.onTaskSelect(value)
+    this.props.history.push({
+      pathname: '/l/task',
+      search: '?query=abc',
+      state: { task: value }
+    })
   }
 
   render() {
@@ -118,8 +126,14 @@ class HomePage extends React.Component {
 
 const mapStoreToProps = state => {
   return {
-    taskId: state.recentTaskId
+    task: state.task
   }
 }
 
-export default connect(mapStoreToProps, null)(HomePage);
+const mapPropsToStore = dispatch => {
+  return {
+    onTaskSelect: (task) => dispatch({type: 'SETTASK', task})
+  }
+}
+
+export default connect(mapStoreToProps, mapPropsToStore)(HomePage);
