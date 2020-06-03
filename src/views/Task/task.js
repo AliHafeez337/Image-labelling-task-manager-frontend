@@ -135,7 +135,7 @@ class Task extends React.Component {
     })
   }
   handleAnnoInstance = (anno) => {
-    this.state.annoDuplicateInstance = anno
+    this.setState({annoDuplicateInstance: anno})
   }
   render() {
     return (

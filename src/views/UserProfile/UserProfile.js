@@ -118,6 +118,8 @@ class UserP extends React.Component {
     if (types.every(type => files.type !== type)) {
          // create error message and assign to container   
          err += files.type+' is not a supported format\n';
+         this.setState({errr:true});
+         this.setState({errrMsg:err});
        }
   
    if (err !== '') { // if message not same old that mean has error 
@@ -150,7 +152,16 @@ class UserP extends React.Component {
       })
       .then(res => {
         console.log(res.data);
-        this.setState({imageSuccess:true});
+        if(res.data.msg){
+          this.setState({errr:false});
+          this.setState({succes:true});
+          this.setState({succesMsg:res.data.msg});
+        }
+        else if(res.data.errmsg){
+          this.setState({errr:true});
+          this.setState({succes:false});
+          this.setState({errrMsg:res.data.errmsg});
+        }
       })
   }
   render() {
@@ -160,14 +171,10 @@ class UserP extends React.Component {
     if(this.state.succes){
       notifi=<SnackbarContent message={'SUCCESS: '+this.state.succesMsg} close color="success"/>;
     }
-    else if(this.state.imageSuccess){
-      notifi=<SnackbarContent message={'SUCCESS: '+'Updated Succesfully'} close color="danger"/>;
-    }
     else if(this.state.errr){
       notifi=<SnackbarContent message={'Error: '+this.state.errrMsg} close color="danger"/>;
     }
     if(this.state.imageInputAllow){
-      console.log(this.state.imageInputAllow)
       imgInput=<div className="form-group">
         <input type="file" className="form-control" id="exampleInputImage" aria-describedby="emailHelp" onChange={this.onChangeHandler}/>
         <Progress max="100" color="success" value={this.state.loaded} >{Math.round(this.state.loaded,2) }%</Progress>
