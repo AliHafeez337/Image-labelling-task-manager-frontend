@@ -43,6 +43,14 @@ class Login extends Component {
       errrMsg:''
     };
   }
+
+  componentDidMount() {
+    if(localStorage.getItem('token')){
+      console.log('Token found.')
+      this.props.history.push('/admin/dashboard')
+    }
+  }
+  
   data={email:'',password:''}
   handleEmail = event => {
     this.data.email= event.target.value;

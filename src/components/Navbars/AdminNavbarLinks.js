@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import { withRouter } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { connect } from 'react-redux';
 
 // @material-ui/core components
@@ -27,6 +28,7 @@ import axios from '../../axiosSet';
 const useStyles = makeStyles(styles);
 
 const AdminNavbarLinks = (props) => {
+  // console.log(props.history)
   const classes = useStyles();
   const [openProfile, setOpenProfile] = React.useState(null);
 
@@ -56,9 +58,7 @@ const AdminNavbarLinks = (props) => {
           localStorage.removeItem("email");
           localStorage.removeItem("archived");
           localStorage.removeItem("usertype");
-          setTimeout(() => {
-            props.history.push('../../login')
-          }, 500)
+          props.history.push('/login')
         }
       });
   };
@@ -66,7 +66,7 @@ const AdminNavbarLinks = (props) => {
     <div>
       {/* search */}
       {/* {console.log(props.token)} */}
-      <div className={classes.searchWrapper} style={{paddingRight:'80px' }}>
+      <div className={classes.searchWrapper} style={{paddingRight:'380px' }}>
         <CustomInput
           formControlProps={{
             className: classes.margin + " " + classes.search
@@ -133,12 +133,14 @@ const AdminNavbarLinks = (props) => {
                       Profile
                     </MenuItem>
                     <Divider light />
-                    <MenuItem
-                      onClick={handleLogoutFunction}
-                      className={classes.dropdownItem}
-                    >
+                    {/* <Link to="/login"> */}
+                      <MenuItem
+                        onClick={handleLogoutFunction}
+                        className={classes.dropdownItem}
+                      >
                       Logout
-                    </MenuItem>
+                      </MenuItem>
+                    {/* </Link>  */}
                   </MenuList>
                 </ClickAwayListener>
               </Paper>
