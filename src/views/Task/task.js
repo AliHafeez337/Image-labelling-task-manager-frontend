@@ -78,6 +78,11 @@ class Task extends React.Component {
       this.setState({ labels: res.data })
     })
   }
+  checkOldAnnoInstanceAndJustDestroy = () => {
+    if (this.state.annoDuplicateInstance){
+      this.state.annoDuplicateInstance.destroy()
+    }
+  }
   checkOldAnnoInstance = () => {
     // console.log(this.state.annoDuplicateInstance)
     if (this.state.annoDuplicateInstance){
@@ -143,6 +148,52 @@ class Task extends React.Component {
   handleAnnoInstance = (anno) => {
     this.state.annoDuplicateInstance = anno
   }
+  handleCheckMark = (labelId) => {
+    // console.log(this.state.task)
+    var task = {...this.state.task}
+    task.labels = []
+    var label = {}
+    this.state.task.labels.forEach((value, index) => {
+      label = {...value}
+      if (labelId === value._id){
+        label.done = true
+      }
+      task.labels.push(label)
+    })
+    // console.log(task)
+    this.checkOldAnnoInstanceAndJustDestroy()
+    this.setState({ task: task })
+    // console.log(this.state.labelObjects)
+    var labels = []
+    this.state.labelObjects.forEach((value) => {
+      label = {...value}
+      if (labelId === value._id ){
+        label.done = true
+      }
+      labels.push(label)
+    })
+    this.checkOldAnnoInstanceAndJustDestroy()
+    this.setState({ labelObjects: labels })
+  }
+  handleRemoveMark = (labelId, response) => {
+    console.log(response)
+    if (response.msg === "Label was deleted and also the label is undone..."){
+      this.checkOldAnnoInstanceAndJustDestroy()
+      this.setState({ task: response.taskDetails })
+
+      var labels = []
+      var label = null
+      this.state.labelObjects.forEach((value) => {
+        label = {...value}
+        if (labelId === value._id ){
+          label.done = false
+        }
+        labels.push(label)
+      })
+      this.checkOldAnnoInstanceAndJustDestroy()
+      this.setState({ labelObjects: labels })
+    }
+  }
   render() {
     return (
       <div>
@@ -157,6 +208,8 @@ class Task extends React.Component {
               taskId = { this.state.task._id }
               done = { this.handleLabellingDone }
               anno = { this.handleAnnoInstance }
+              check = { this.handleCheckMark }
+              remove = { this.handleRemoveMark }
             ></ImageCard>
           </div>
           <div className="col-lg-4 col-md-4">

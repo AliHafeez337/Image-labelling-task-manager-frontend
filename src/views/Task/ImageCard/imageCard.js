@@ -124,6 +124,7 @@ const ImageCard = (props) => {
       console.log('created', obj)
       axios.post('/label/add', obj)
         .then(res => {
+          props.check(obj.label)
           // props.done()
           // anno.destroy()
         })
@@ -166,6 +167,7 @@ const ImageCard = (props) => {
           params: {id: obj.id}
         })
         .then(res => {
+          props.remove(obj.label, res.data)
           // props.done()
           // anno.destroy()
         })
