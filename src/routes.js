@@ -32,6 +32,7 @@ import DashboardPage from "views/Dashboard/Dashboard.js";
 import HomePage from "views/Dashboard/Home.js"
 import UserProfile from "views/UserProfile/UserProfile.js";
 import Task from 'views/Task/task'
+import AddTask from 'views/Task/AddTask/addTask.js'
 
 const adminDashboardRoutes = [
   {
@@ -53,6 +54,13 @@ const adminDashboardRoutes = [
     name: "Recent Task",
     icon: Assignment,
     component: Task,
+    layout: "/l"
+  },
+  {
+    path: "/addTask",
+    name: "Add Task",
+    icon: Assignment,
+    component: AddTask,
     layout: "/l"
   },
   {

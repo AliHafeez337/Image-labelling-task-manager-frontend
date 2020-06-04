@@ -2,18 +2,16 @@ import React from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 // core components
+import Select from 'react-select';
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
-import CardHeader from "components/Card/CardHeader.js";
-import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
-import axios from '../../axiosSet';
+import axios from '../../../axiosSet.js';
 import SnackbarContent from "components/Snackbar/SnackbarContent.js";
 import {Progress} from 'reactstrap';
-import avatar from "assets/img/faces/marc1.jpg";
-class UserP extends React.Component {
+class AddTask extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -35,46 +33,34 @@ class UserP extends React.Component {
           textDecoration: "none"
         }
       },
-      userProfile:{},
-      name:'',
-      email:'',
-      password:'',
-      password2:'',
       succes:false,
       succesMsg:'',
       errr:false,
       errrMsg:'',
       imageInputAllow:false,
       selectedFile: null,
-      imageSuccess:false
+      selectedFileArray: [],
+      imageSuccess:false,
+      options : [
+        { value: 'chocolate', label: 'Chocolate' },
+        { value: 'strawberry', label: 'Strawberry' },
+        { value: 'vanilla', label: 'Vanilla' }
+      ]
     }
   }
-  data={name:'',
-  email:'',
-  password:'',
-  password2:''}
-  handleName = event => {
-    this.data.name= event.target.value;
-  }
-  handleEmail = event => {
-    this.data.email= event.target.value;
-  }
-  handlePassword1 = event => {
-    this.data.password= event.target.value;
-  }
-  handlePassword2 = event => {
-    this.data.password2= event.target.value;
-  }
-  componentWillMount(){
-    axios.get('/user/profile')
-      .then(res => {
-        this.setState({userProfile:res.data});
-        this.data.name=res.data.name;
-        this.data.email=res.data.email;
-        console.log(this.state.userProfile);
-      });
-    
-  }
+//   handleName = event => {
+//     this.data.name= event.target.value;
+//   }
+//   handleEmail = event => {
+//     this.data.email= event.target.value;
+//   }
+//   handlePassword1 = event => {
+//     this.data.password= event.target.value;
+//   }
+//   handlePassword2 = event => {
+//     this.data.password2= event.target.value;
+//   }
+  imageArray=[];
   register=()=> {
     this.setState({
       name:this.data.name,
@@ -136,6 +122,9 @@ class UserP extends React.Component {
       this.setState({
         selectedFile: event.target.files[0],
         loaded: 0,
+      },()=>{
+          this.imageArray.push(this.state.selectedFile)
+          console.log(this.imageArray)
       })
     }
   }
@@ -165,83 +154,63 @@ class UserP extends React.Component {
       })
   }
   render() {
-    const classes=makeStyles(this.state.styles);
+    makeStyles(this.state.styles);
     let notifi;
-    let imgInput;
+    let items;
+    items = this.imageArray.map((item) =>
+    <li>{item.name}</li>
+    );
     if(this.state.succes){
       notifi=<SnackbarContent message={'SUCCESS: '+this.state.succesMsg} close color="success"/>;
     }
     else if(this.state.errr){
       notifi=<SnackbarContent message={'Error: '+this.state.errrMsg} close color="danger"/>;
     }
-    if(this.state.imageInputAllow){
-      imgInput=<div className="form-group">
-        <input type="file" className="form-control" id="exampleInputImage" aria-describedby="emailHelp" onChange={this.onChangeHandler}/>
-        <Progress max="100" color="success" value={this.state.loaded} >{Math.round(this.state.loaded,2) }%</Progress>
-        <Button color="success" round onClick={()=>this.onClickHandler()}>
-        Upload
-        </Button>
-        <Button color="info" round onClick={()=>this.setImageInpN()}>
-        cancel
-        </Button>
-        </div>;
-    }else{
-      imgInput=<small></small>;
-    }
+    
     return (
       <div>
-        <br/>{notifi}<br/>
-        <br/>{this.notifi2}<br/>
+        {notifi}<br/>
         <GridContainer>
-        <GridItem xs={12} sm={12} md={4}>
-            <Card profile>
-              <CardAvatar profile>
-                <a href="#pablo" onClick={e => e.preventDefault()}>
-                  <img src={avatar} alt="..." />
-                </a>
-              </CardAvatar>
-              <div>
-              {imgInput}<br/>
-              <Button color="primary" round onClick={()=>this.setImageInp()}>
-              Update Profile Picture
-              </Button>
-              <Button color="danger" round data-toggle="modal" data-target="#myModal">
-              Delete Profile Picture
-              </Button>
-              </div>
-              
-              <CardBody profile>
-                <h6 className={classes.cardCategory}>{this.state.userProfile.name}</h6>
-                <h4 className={classes.cardTitle}>{this.state.userProfile.email}</h4>
-                <p className={classes.description}> <small style={{color: 'indigo', size:'20px', fontWeight:'bolder'}}>Created At:</small>&nbsp; {this.state.userProfile.createdAt}</p>
-                <Button color="secondary" round>
-                {this.state.userProfile.usertype}
-                </Button>
-              </CardBody>
-            </Card>
-          </GridItem>
-          <GridItem xs={12} sm={12} md={8}>
+        <GridItem xs={12} sm={12} md={12}>
             <Card>
-              <CardHeader color="primary">
-                <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
-              </CardHeader>
               <CardBody>
-                <div className="form-group">
-                <input type="text" className="form-control" id="exampleInputName" aria-describedby="emailHelp" placeholder={this.state.userProfile.name} onChange={this.handleName}/>
-                </div>
-                <div className="form-group">
-                  <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder={this.state.userProfile.email}  onChange={this.handleEmail}/>
-                  <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
-                </div>
-                <div className="form-group">
-                  <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" onChange={this.handlePassword1}/>
-                </div>
-                <div className="form-group">
-                  <input type="password" className="form-control" id="exampleInputPassword2" placeholder="Retype Password" onChange={this.handlePassword2}/>
-                </div>
-                <Button color="success" onClick={this.register}>
-                    Update
-                </Button>
+                  <div className="form-group">
+                    <small id="nameHelp" className="form-text text-muted">Enter Task Name</small>
+                    <input type="text" className="form-control" id="exampleInputName" aria-describedby="emailHelp" placeholder="Enter email" onChange={this.handleEmail}/>
+                  </div>
+                  <small id="imageHelp" className="form-text text-muted">Select Task Images</small>
+                  <div style={{border:'2px solid black'}}>
+                    <div className="form-group" style={{padding: '30px'}}>
+                        <input type="file" className="form-control" id="exampleInputImage" aria-describedby="imageHelp" onChange={this.onChangeHandler}/>
+                        <Progress max="100" color="success" value={this.state.loaded} >{Math.round(this.state.loaded,2) }%</Progress>
+                        <Button color="success" round onClick={()=>this.onClickHandler()}>
+                            Upload
+                        </Button>
+                    </div><hr/>
+                    <div style={{padding: '30px'}}>
+                        <ul>
+                            {items}
+                        </ul>
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <small id="labelsHelp" className="form-text text-muted">Enter labells in this format <b>Label Category: lable1,lable2,lable3</b></small>
+                    <textarea type="textarea" className="form-control" id="exampleInputName" aria-describedby="emailHelp" placeholder="Enter email" onChange={this.handleEmail}/>
+                  </div>
+                    <br/><br/>
+                  <div className="form-group">
+                  <small id="userTagHelp" className="form-text text-muted">Select Assigned Users</small>
+                  <Select
+                    isMulti
+                    name="colors"
+                    options={this.state.options}
+                    className="basic-multi-select"
+                    classNamePrefix="select"
+                  />
+                  </div><br/>
+                  <Button color="success" round onClick={this.loginMethod}>
+                      Login
+                  </Button>
               </CardBody>
             </Card>
           </GridItem>
@@ -253,4 +222,4 @@ class UserP extends React.Component {
 }
 
 
-export default UserP 
+export default AddTask 
