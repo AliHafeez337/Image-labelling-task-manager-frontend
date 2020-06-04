@@ -1,7 +1,8 @@
 import React from "react";
 // react plugin for creating charts
 import ChartistGraph from "react-chartist";
-
+import Button from "components/CustomButtons/Button.js";
+import { Link } from 'react-router-dom';
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
 import Icon from "@material-ui/core/Icon";
@@ -55,6 +56,9 @@ export default function Dashboard(props) {
       {/* {redirect} */}
       <GridContainer>
         <GridItem xs={12} sm={6} md={3}>
+        <Button color="success" round component={Link} to="/signup">
+        Add Task
+        </Button>
           <Card>
             <CardHeader color="warning" stats icon>
               <CardIcon color="warning">
