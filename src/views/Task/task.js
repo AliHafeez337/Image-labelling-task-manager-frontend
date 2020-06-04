@@ -27,50 +27,61 @@ class Task extends React.Component {
     }
   }
   componentDidMount() {
+    if (! this.props.task){
+      this.props.history.push({
+        pathname: '/l/home'
+      })
+    } else {
+      var task = null
 
-    // const script = document.createElement("script");
-    // script.src = "./a.js";
-    // script.async = true;
-    // document.body.appendChild(script);
+      if (this.props.location.state){
+        console.log(this.props.location.state.task)
+        task = this.props.location.state.task
+      } else{
+        task = this.props.task
+      }
 
-    // console.log(this.ref)
-    console.log(this.props.taskId)
-    // if (this.props.taskId){
-
-      axios.get('/task/5ed20b50d052443ddc52963e')
-      // axios.get('/task/' + this.props.taskId)
-      .then(res => {
-        this.setState({ task: res.data })
-        if (res.data.photos[0]){
-          this.setState({
-            thisPicture: res.data.photos[0],
-            thisPictureIndex: 0
-          })
-        }
-        res.data.labels.forEach((value, indx) => {
-          // console.log(value, indx)
-          if (!this.state.categories.includes(res.data.labels[indx].category)){
-            // this.state.categories.push(res.data.labels[indx].category)
-            var tempArr = [...this.state.categories]
-            var tempArr2 = [...this.state.categoryObjects]
-            tempArr.push(res.data.labels[indx].category)
-            tempArr2.push(res.data.labels[indx])
+      // axios.get('/task/5ed20b50d052443ddc52963e')
+      axios.get('/task/' + task._id)
+        .then(res => {
+          console.log(res.data)
+          this.setState({ task: res.data })
+          if (res.data.photos[0]){
             this.setState({
-              categories: tempArr,
-              categoryObjects: tempArr2
+              thisPicture: res.data.photos[0],
+              thisPictureIndex: 0
             })
           }
+          res.data.labels.forEach((value, indx) => {
+            // console.log(value, indx)
+            if (!this.state.categories.includes(res.data.labels[indx].category)){
+              // this.state.categories.push(res.data.labels[indx].category)
+              var tempArr = [...this.state.categories]
+              var tempArr2 = [...this.state.categoryObjects]
+              tempArr.push(res.data.labels[indx].category)
+              tempArr2.push(res.data.labels[indx])
+              this.setState({
+                categories: tempArr,
+                categoryObjects: tempArr2
+              })
+            }
+          })
+          this.getPicture(this.state.thisPicture._id)
         })
-        this.getPicture(this.state.thisPicture._id)
-      })
-    // }
+    }
   }
+  
   getPicture = id => {
     axios.get('/label/picture/'+ id)
     .then(res => {
       // console.log(res.data)
       this.setState({ labels: res.data })
     })
+  }
+  checkOldAnnoInstanceAndJustDestroy = () => {
+    if (this.state.annoDuplicateInstance){
+      this.state.annoDuplicateInstance.destroy()
+    }
   }
   checkOldAnnoInstance = () => {
     // console.log(this.state.annoDuplicateInstance)
@@ -137,6 +148,52 @@ class Task extends React.Component {
   handleAnnoInstance = (anno) => {
     this.setState({annoDuplicateInstance: anno})
   }
+  handleCheckMark = (labelId) => {
+    // console.log(this.state.task)
+    var task = {...this.state.task}
+    task.labels = []
+    var label = {}
+    this.state.task.labels.forEach((value, index) => {
+      label = {...value}
+      if (labelId === value._id){
+        label.done = true
+      }
+      task.labels.push(label)
+    })
+    // console.log(task)
+    this.checkOldAnnoInstanceAndJustDestroy()
+    this.setState({ task: task })
+    // console.log(this.state.labelObjects)
+    var labels = []
+    this.state.labelObjects.forEach((value) => {
+      label = {...value}
+      if (labelId === value._id ){
+        label.done = true
+      }
+      labels.push(label)
+    })
+    this.checkOldAnnoInstanceAndJustDestroy()
+    this.setState({ labelObjects: labels })
+  }
+  handleRemoveMark = (labelId, response) => {
+    console.log(response)
+    if (response.msg === "Label was deleted and also the label is undone..."){
+      this.checkOldAnnoInstanceAndJustDestroy()
+      this.setState({ task: response.taskDetails })
+
+      var labels = []
+      var label = null
+      this.state.labelObjects.forEach((value) => {
+        label = {...value}
+        if (labelId === value._id ){
+          label.done = false
+        }
+        labels.push(label)
+      })
+      this.checkOldAnnoInstanceAndJustDestroy()
+      this.setState({ labelObjects: labels })
+    }
+  }
   render() {
     return (
       <div>
@@ -151,6 +208,8 @@ class Task extends React.Component {
               taskId = { this.state.task._id }
               done = { this.handleLabellingDone }
               anno = { this.handleAnnoInstance }
+              check = { this.handleCheckMark }
+              remove = { this.handleRemoveMark }
             ></ImageCard>
           </div>
           <div className="col-lg-4 col-md-4">
@@ -194,12 +253,9 @@ class Task extends React.Component {
 }
 
 const mapStoreToProps = state => {
-  const a = {
-    taskId: state.recentTaskId
+  return {
+    task: state.task
   }
-  // console.log(a.taskId)
-
-  return a
 }
 
 export default connect(mapStoreToProps, null)(Task);

@@ -9,6 +9,9 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
+import CustomTabs from "components/CustomTabs/CustomTabs.js";
+import NavigateBefore from "@material-ui/icons/NavigateBefore";
+import NavigateNext from "@material-ui/icons/NavigateNext";
 
 import axios from '../../../axiosSet'
 import { apiURL } from '../../../config';
@@ -121,6 +124,7 @@ const ImageCard = (props) => {
       console.log('created', obj)
       axios.post('/label/add', obj)
         .then(res => {
+          props.check(obj.label)
           // props.done()
           // anno.destroy()
         })
@@ -163,6 +167,7 @@ const ImageCard = (props) => {
           params: {id: obj.id}
         })
         .then(res => {
+          props.remove(obj.label, res.data)
           // props.done()
           // anno.destroy()
         })
@@ -175,6 +180,40 @@ const ImageCard = (props) => {
     <div>
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
+          {/* <CustomTabs
+              title="Tasks:"
+              headerColor="primary"
+              tabs={[
+                {
+                  tabName: "Previous Picture",
+                  tabIcon: NavigateBefore,
+                  tabContent: (
+                    <img 
+                      className = "annotatable"
+                      id = "annotoriousLabels"
+                      src = {apiURL + '/' + props.photo.url} 
+                      alt = "To be labelled..."
+                      width = '100%'
+                      height = '100%'
+                    /> 
+                  )
+                },
+                {
+                  tabName: "Next Picture",
+                  tabIcon: NavigateNext,
+                  tabContent: (
+                    <img 
+                      className = "annotatable"
+                      id = "annotoriousLabels"
+                      src = {apiURL + '/' + props.photo.url} 
+                      alt = "To be labelled..."
+                      width = '100%'
+                      height = '100%'
+                    /> 
+                  )
+                }
+              ]}
+            /> */}
           <Card>
             <CardHeader color="primary">
               <h4 className={classes.cardTitleWhite}>Picture labelling area.</h4>
