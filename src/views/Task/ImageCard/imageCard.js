@@ -39,23 +39,7 @@ const useStyles = makeStyles(styles);
 
 const ImageCard = (props) => {
 
-  // try{
-  //   console.log(apiURL + '/' + props.photo.url)
-  //   console.log(props.photo)
-  //   console.log(props.taskId)
-  //   console.log(props.selectedLabelObject)
-  // }
-  // catch(e){}
-
   const Annotorious = window.Annotorious
-  // console.log(Annotorious);
-  // setTimeout(() => {
-  //   // const anno = new Annotorious({ image: 'annotoriousLabels' });
-  //   var anno = Annotorious.init({
-  //     image: 'annotoriousLabels'
-  //   });
-    
-  // }, 2000)
 
   if (props.selectedLabelObject){
 
@@ -82,10 +66,13 @@ const ImageCard = (props) => {
     props.anno(anno)
     
     // console.log(props.photo._id)
-    anno.loadAnnotations('http://localhost:3100/label/picture/' + props.photo._id).then(function(annotations) {
-      // Do something
-      console.log(annotations)
-    });
+    anno.loadAnnotations('http://localhost:3100/label/picture/' + props.photo._id)
+      .then(annotations => {
+        // annotations.forEach(value => {
+        //   console.log(value.underlying)
+        // })
+      }
+    );
     
     axios.get('/label/picture/' + props.photo._id)
       .then(res => {
