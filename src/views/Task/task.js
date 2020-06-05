@@ -134,10 +134,12 @@ class Task extends React.Component {
   }
   handleLabelName = (value, index) => {
     this.checkOldAnnoInstance()
-    this.setState({ 
-      selectedLabel: index,
-      selectedLabelObject: value
-    })
+    if (this.state.task.photos.length > 0){
+      this.setState({ 
+        selectedLabel: index,
+        selectedLabelObject: value
+      })
+    }
   }
   handleLabellingDone = () => {
     this.setState({ 
@@ -146,7 +148,7 @@ class Task extends React.Component {
     })
   }
   handleAnnoInstance = (anno) => {
-    this.setState({annoDuplicateInstance: anno})
+    this.state.annoDuplicateInstance = anno
   }
   handleCheckMark = (labelId) => {
     // console.log(this.state.task)
