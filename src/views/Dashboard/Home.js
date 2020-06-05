@@ -98,7 +98,7 @@ class HomePage extends React.Component {
                 <h4 className={classes.cardTitleWhite}>Tasks assigned to you...</h4>
               </CardHeader>
               <CardBody>
-                <table className="table">
+                <table className="table table-hover">
                   <thead>
                     <tr className="d-flex">
                       {/* <th scope="col" className="col-1">#</th> */}
