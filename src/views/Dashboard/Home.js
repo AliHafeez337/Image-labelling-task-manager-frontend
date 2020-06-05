@@ -63,13 +63,13 @@ class HomePage extends React.Component {
                   "d-flex"
                 }>
               {/* <th className="col-1" scope="row">{index + 1}</th> */}
-              <td className="col-2">{value.name}</td>
+              <td className="col-2">{ value.name }</td>
               <td className="col-3"><Progress max="100" color="success" value={value.percent}>{value.percent}%</Progress></td>
-              <td className="col-1">{value.labels.length}</td>
-              <td className="col-1">{value.photos.length}</td>
-              <td className="col-1">{value.assignedTo.length}</td>
-              <td className="col-2">{value.createdAt.substr(0, 10)}</td>
-              <td className="col-2">{value.dueDate.substr(0, 10)}</td>
+              <td className="col-1">{ value.labels.length }</td>
+              <td className="col-1">{ value.photos.length }</td>
+              <td className="col-1">{ value.assignedTo.length }</td>
+              <td className="col-2">{ value.createdAt.substr(0, 10) }</td>
+              <td className="col-2">{ value.dueDate ? value.dueDate.substr(0, 10): null}</td>
             </tr>
           )
         })
