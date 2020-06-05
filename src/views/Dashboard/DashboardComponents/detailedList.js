@@ -16,6 +16,8 @@ import ArchiveIcon from '@material-ui/icons/Archive';
 import UnarchiveIcon from '@material-ui/icons/Unarchive';
 import GetAppIcon from '@material-ui/icons/GetApp';
 
+import { apiURL } from './../../../config';
+
 const styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
@@ -39,10 +41,45 @@ const useStyles = makeStyles(styles);
 
 const TaskList = props => {
   const classes = useStyles();
+  console.log(props.labellers)
 
   var rows = []
   if (props.tasks){
     props.tasks.forEach((task, index) => {
+      var col = 4, col1 = [], col2 = [], col3 = [], col4 = [], col5 = []
+
+      if(props.labellers.length > 0){
+        task.assignedTo.forEach(labellerId =>{
+          var thisLabeller = null
+          props.labellers.forEach(labeller => {
+            if (labeller.task === task._id && labeller._id === labellerId){
+              thisLabeller = labeller
+            }
+          })
+          if (thisLabeller){
+            console.log(thisLabeller, task, labellerId, col % 4)
+            // console.log(thisLabeller.labels.length)
+            switch (col % 4){
+              case 0:
+                col1.push(<div key={ col % 4 }><img src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
+                break
+              case 1:
+                col2.push(<div key={ col % 4 }><img src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
+                break;
+              case 2:
+                col3.push(<div key={ col % 4 }><img src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
+                break;
+              case 3:
+                col4.push(<div key={ col % 4 }><img src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
+                break;
+              // case 4:
+              //   col5.push(<div key={ col % 4 }><img src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
+              //   break;
+            }
+          }
+          col++ 
+        })
+      }
       rows.push(
         <tr 
           key = { index } 
@@ -176,7 +213,23 @@ const TaskList = props => {
                 </div>
               </div>
               <div className="col-lg-9 col-md-8 col-sm-8 col-xs-6">
-                <span style={{'fontWeight':'bold'}}>Images</span>
+                <div className="row" style={{ "height": "160px", "overflowY": "scroll" }}> 
+                  <div className="column" style={{"msFlex": "20%", "flex": "20%"}}>
+                    { col1 }
+                  </div>
+                  <div className="column" style={{"msFlex": "20%", "flex": "20%"}}>
+                    { col2 }
+                  </div>  
+                  <div className="column" style={{"msFlex": "20%", "flex": "20%"}}>
+                    { col3 }
+                  </div>
+                  <div className="column" style={{"msFlex": "20%", "flex": "20%"}}>
+                    { col4 }
+                  </div>
+                  {/* <div className="column" style={{"msFlex": "20%", "flex": "20%"}}>
+                    { col5 }
+                  </div> */}
+                </div>
               </div>
             </div>
           </td>

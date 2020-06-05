@@ -36,6 +36,7 @@ class Dashboard extends React.Component {
       assignedTasks: null,
       archivedTasks: null,
       labellersData: [],
+      allLabellers: [],
     }
   }
 
@@ -72,31 +73,48 @@ class Dashboard extends React.Component {
 
           // Getting each labellers data
           
-          res.data.forEach(task => {
-            let a = []
+          res.data.forEach((task, index) => {
+            // let a = []
             task.assignedTo.forEach(labeller =>{
               let b = {}
               axios.get('/admin/' + labeller)
                 .then(res => {
                   if (res.data){
-                    b = res.data
+                    b = {...res.data}
                   
                     // how many labels this labeller has done for this task
                     axios.get('/label/labeller/' + labeller + '/task/' + task._id)
                       .then(res => {
-                        if (res.data){
+                        var d = [...this.state.allLabellers]
+                        // if (res.data.length > 0){
+                          // var f = []
+                          // res.data.forEach(label => f.push(label))
+                          // console.log(f)
                           b.labels = res.data
+                          b.task = task._id
                           // console.log(b)
-                          a.push(b)
-                        }
+                          // a.push(b)
+                          d.push(b)
+                        // }
+                        this.setState({ allLabellers: d })
+                        // console.log(this.state.allLabellers, this.state.allLabellersId)
                       })
                   }
                 })
             })
-            var c = [...this.state.labellersData]
-            c.push(a)
-            this.setState({ labellersData: c })
+            // console.log(this.state.tasks)
+            // var c = [...this.state.labellersData]
+            // c.push(a)
+            // this.setState({ labellersData: c })
             // console.log(c)
+
+            // var c = [...this.state.tasks]
+            // c[index].labellers = a
+            // c.forEach(task => {
+            //   if (task.labellers){
+            //     console.log(task.labellers.length)
+            //   }
+            // })
           })
         }
       })
@@ -131,7 +149,8 @@ class Dashboard extends React.Component {
           <div className="col-lg-12 col-md-12">
             <TaskList 
               tasks = { this.state.tasks }
-              labellers = { this.state.labellersData }
+              // labellers = { this.state.labellersData }
+              labellers = { this.state.allLabellers }
             />
           </div>
         </div>
