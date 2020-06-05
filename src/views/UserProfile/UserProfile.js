@@ -12,6 +12,7 @@ import CardBody from "components/Card/CardBody.js";
 import axios from '../../axiosSet';
 import SnackbarContent from "components/Snackbar/SnackbarContent.js";
 import {Progress} from 'reactstrap';
+import url1 from '../../config.js';
 import avatar from "assets/img/faces/marc1.jpg";
 class UserP extends React.Component {
   constructor(props) {
@@ -168,6 +169,7 @@ class UserP extends React.Component {
     const classes=makeStyles(this.state.styles);
     let notifi;
     let imgInput;
+    let profilePhoto;
     if(this.state.succes){
       notifi=<SnackbarContent message={'SUCCESS: '+this.state.succesMsg} close color="success"/>;
     }
@@ -188,6 +190,7 @@ class UserP extends React.Component {
     }else{
       imgInput=<small></small>;
     }
+
     return (
       <div>
         <br/>{notifi}<br/>
