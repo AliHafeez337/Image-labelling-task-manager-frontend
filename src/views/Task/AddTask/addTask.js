@@ -39,38 +39,73 @@ class AddTask extends React.Component {
       errrMsg:'',
       imageInputAllow:false,
       selectedFile: null,
-      selectedFileArray: [],
+      selectedFiles: [],
       imageSuccess:false,
-      options : [
-        { value: 'chocolate', label: 'Chocolate' },
-        { value: 'strawberry', label: 'Strawberry' },
-        { value: 'vanilla', label: 'Vanilla' }
-      ]
+      options : [],
+      taskId:null,
+      buttonEnable:true,
+      canDeleteIt:true,
+
+      TaskName:null,
+      TaskAssignedTo:null,
+      TaskLabels:null
     }
   }
-//   handleName = event => {
-//     this.data.name= event.target.value;
-//   }
-//   handleEmail = event => {
-//     this.data.email= event.target.value;
-//   }
-//   handlePassword1 = event => {
-//     this.data.password= event.target.value;
-//   }
-//   handlePassword2 = event => {
-//     this.data.password2= event.target.value;
-//   }
+taskData={tname:null,tlabels:null,tassigned:[]}
+  handleName = event => {
+    this.taskData.tname= event.target.value;
+  }
+  handleLabels = event => {
+    let optimizedStringLabel;
+    let labelArray=[];
+    let labelArray2=[];
+    optimizedStringLabel=event.target.value;
+    if(optimizedStringLabel.includes(' ')){
+      optimizedStringLabel.replace(' ','')
+    }
+    if(optimizedStringLabel.includes('+')){
+      labelArray=optimizedStringLabel.split('+');
+    }
+    else{
+      labelArray.push(optimizedStringLabel);
+    }
+    for (let index = 0; index < labelArray.length; index++) {
+      if(labelArray[index].includes(':')){
+        let make2=labelArray[index].split(':');
+        if(make2[1].includes(',')){
+          let nextMake=make2[1].split(',');
+          for (let index2 = 0; index2 < nextMake.length; index2++) {
+            labelArray2.push({category:make2[0],name:nextMake[index2]})
+          }
+        }
+        else{
+          labelArray2.push({category:make2[0],name:make2[1]})
+        }
+      }
+      else{console.log('nno')}
+    }
+    this.taskData.tlabels=labelArray2;
+  }
+
+  handleAssigned = value => {
+    this.taskData.tassigned=[]
+    let dat=value
+    for (let index = 0; index < dat.length; index++) {
+      this.taskData.tassigned.push(dat[index].value);
+    }
+  }
+
   imageArray=[];
-  register=()=> {
+  
+  makeTask=()=> {
     this.setState({
-      name:this.data.name,
-      email:this.data.email,
-      password:this.data.password,
-      password2:this.data.password2
+      name:this.taskData.tname,
+      assignedTo:this.taskData.tassigned,
+      labels:this.taskData.tlabels
     },()=>{
-      const user = {name:this.state.name,email:this.state.email,password:this.state.password,password2:this.state.password2};
-      console.log(user);
-      axios.patch('/user/update', user)
+      const task = {name:this.state.name,assignedTo:this.state.assignedTo,labels:this.state.labels,archived:false};
+      console.log(task);
+      axios.patch('/task/update?id='+this.state.taskId, task)
       .then(res => {
         console.log(res.data);
         if(res.data.msg){
@@ -82,6 +117,7 @@ class AddTask extends React.Component {
           this.setState({errr:true});
           this.setState({succes:false});
           this.setState({errrMsg:res.data.errmsg[0].msg});
+          
         }
       });
     });    
@@ -124,40 +160,62 @@ class AddTask extends React.Component {
         loaded: 0,
       },()=>{
           this.imageArray.push(this.state.selectedFile)
-          console.log(this.imageArray)
+          
       })
     }
   }
   onClickHandler = () => {
     axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
     console.log(this.state.selectedFile)
-    const data = new FormData() 
-    data.append('photo', this.state.selectedFile)
-    axios.patch("/userImage/add", data, {
-        onUploadProgress: ProgressEvent => {
+    const data1 = new FormData() 
+    data1.append('photo', this.state.selectedFile)
+    axios.patch("/userImage/add?id="+this.state.taskId, data1, {
+          onUploadProgress: ProgressEvent => {
           this.setState({
             loaded: (ProgressEvent.loaded / ProgressEvent.total*100),
         })}
       })
       .then(res => {
         console.log(res.data);
-        if(res.data.msg){
-          this.setState({errr:false});
-          this.setState({succes:true});
-          this.setState({succesMsg:res.data.msg});
-        }
-        else if(res.data.errmsg){
-          this.setState({errr:true});
-          this.setState({succes:false});
-          this.setState({errrMsg:res.data.errmsg});
-        }
+        this.setState({buttonEnable:false})
+        this.setState({selectedFiles: this.imageArray})
       })
+  }
+
+  componentWillMount(){
+    let userList=[];
+    let userRecieved=[];
+    let userObj={};
+    axios.post('/task/new')
+      .then(res => {
+        console.log(res.data);
+        this.setState({taskId:res.data.task._id})
+        axios.get('/admin/user/all')
+          .then(res => {
+            console.log(res.data);
+            userRecieved=res.data;
+            for (let index = 0; index < userRecieved.length; index++) {
+              userObj={ value: userRecieved[index], label: userRecieved[index].name+' | '+userRecieved[index].email };
+              userList.push(userObj)
+            }
+            this.setState({options:userList});
+          });
+      });
+    
+  }
+  componentWillUnmount(){
+    if(this.state.selectedFiles.length<0 || this.taskData.tname===null || this.taskData.tname==='' || this.taskData.tlabels===null || this.taskData.tlabels===[]){
+      axios.delete('/task/delete/'+this.state.taskId)
+      .then(res => {
+        console.log(res.data);
+      });
+    }
   }
   render() {
     makeStyles(this.state.styles);
     let notifi;
     let items;
-    items = this.imageArray.map((item) =>
+    items = this.state.selectedFiles.map((item) =>
     <li>{item.name}</li>
     );
     if(this.state.succes){
@@ -174,10 +232,6 @@ class AddTask extends React.Component {
         <GridItem xs={12} sm={12} md={12}>
             <Card>
               <CardBody>
-                  <div className="form-group">
-                    <small id="nameHelp" className="form-text text-muted">Enter Task Name</small>
-                    <input type="text" className="form-control" id="exampleInputName" aria-describedby="emailHelp" placeholder="Enter email" onChange={this.handleEmail}/>
-                  </div>
                   <small id="imageHelp" className="form-text text-muted">Select Task Images</small>
                   <div style={{border:'2px solid black'}}>
                     <div className="form-group" style={{padding: '30px'}}>
@@ -188,16 +242,23 @@ class AddTask extends React.Component {
                         </Button>
                     </div><hr/>
                     <div style={{padding: '30px'}}>
-                        <ul>
+                        <ol>
                             {items}
-                        </ul>
+                        </ol>
                     </div>
                   </div>
+
                   <div className="form-group">
-                    <small id="labelsHelp" className="form-text text-muted">Enter labells in this format <b>Label Category: lable1,lable2,lable3</b></small>
-                    <textarea type="textarea" className="form-control" id="exampleInputName" aria-describedby="emailHelp" placeholder="Enter email" onChange={this.handleEmail}/>
+                    <small id="nameHelp" className="form-text text-muted">Enter Task Name</small>
+                    <input type="text" className="form-control" id="exampleInputName" aria-describedby="emailHelp" placeholder="Enter Task Name" onChange={this.handleName}/>
+                  </div>
+
+                  <div className="form-group">
+                    <small id="labelsHelp" className="form-text text-muted">Enter labells in this format <b style={{color:'red'}}>Label Category1: lable1,lable2,lable3 + Label Category2: lable1,lable2,lable3 + Label Category3: lable1,lable2,lable3 <br/> (as many as you want like this format)</b></small>
+                    <textarea type="textarea" className="form-control" id="exampleInputName" aria-describedby="emailHelp" placeholder="Enter labels" onChange={this.handleLabels}/>
                   </div>
                     <br/><br/>
+                  
                   <div className="form-group">
                   <small id="userTagHelp" className="form-text text-muted">Select Assigned Users</small>
                   <Select
@@ -206,10 +267,12 @@ class AddTask extends React.Component {
                     options={this.state.options}
                     className="basic-multi-select"
                     classNamePrefix="select"
+                    onChange={(value) => this.handleAssigned(value)}
                   />
                   </div><br/>
-                  <Button color="success" round onClick={this.loginMethod}>
-                      Login
+
+                  <Button disabled={this.state.buttonEnable} color="success" round onClick={this.makeTask}>
+                      Create Task
                   </Button>
               </CardBody>
             </Card>
