@@ -48,12 +48,16 @@ class AddTask extends React.Component {
 
       TaskName:null,
       TaskAssignedTo:null,
-      TaskLabels:null
+      TaskLabels:null,
+      TaskDate:null
     }
   }
-taskData={tname:null,tlabels:null,tassigned:[]}
+taskData={tname:null,tlabels:null,tassigned:[],tdate:null}
   handleName = event => {
     this.taskData.tname= event.target.value;
+  }
+  handleDate = event =>{
+    this.taskData.tdate= event.target.value;
   }
   handleLabels = event => {
     let optimizedStringLabel;
@@ -99,11 +103,12 @@ taskData={tname:null,tlabels:null,tassigned:[]}
   
   makeTask=()=> {
     this.setState({
-      name:this.taskData.tname,
-      assignedTo:this.taskData.tassigned,
-      labels:this.taskData.tlabels
+      TaskName:this.taskData.tname,
+      TaskAssignedTo:this.taskData.tassigned,
+      TaskLabels:this.taskData.tlabels,
+      TaskDate:this.taskData.tdate
     },()=>{
-      const task = {name:this.state.name,assignedTo:this.state.assignedTo,labels:this.state.labels,archived:false};
+      const task = {name:this.state.TaskName,assignedTo:this.state.TaskAssignedTo,labels:this.state.TaskLabels,dueDate:this.state.TaskDate,archived:false};
       console.log(task);
       axios.patch('/task/update?id='+this.state.taskId, task)
       .then(res => {
@@ -169,7 +174,7 @@ taskData={tname:null,tlabels:null,tassigned:[]}
     console.log(this.state.selectedFile)
     const data1 = new FormData() 
     data1.append('photo', this.state.selectedFile)
-    axios.patch("/userImage/add?id="+this.state.taskId, data1, {
+    axios.patch("taskImage/add?id="+this.state.taskId, data1, {
           onUploadProgress: ProgressEvent => {
           this.setState({
             loaded: (ProgressEvent.loaded / ProgressEvent.total*100),
@@ -270,6 +275,11 @@ taskData={tname:null,tlabels:null,tassigned:[]}
                     onChange={(value) => this.handleAssigned(value)}
                   />
                   </div><br/>
+
+                  <div className="form-group">
+                    <small id="nameHelp" className="form-text text-muted">Due Date</small>
+                    <input type="date" className="form-control" id="exampleInputName" aria-describedby="emailHelp" placeholder="Select Due Date" onChange={this.handleDate}/>
+                  </div>
 
                   <Button disabled={this.state.buttonEnable} color="success" round onClick={this.makeTask}>
                       Create Task
