@@ -41,15 +41,16 @@ const useStyles = makeStyles(styles);
 
 const TaskList = props => {
   const classes = useStyles();
-  console.log(props.labellers)
+  // console.log(props.labellers)
 
   var rows = []
   if (props.tasks){
     props.tasks.forEach((task, index) => {
-      var col = 4, col1 = [], col2 = [], col3 = [], col4 = [], col5 = []
+      var col = 4, col1 = [], col2 = [], col3 = [], col4 = []
+      // var col5 = []
 
       if(props.labellers.length > 0){
-        task.assignedTo.forEach(labellerId =>{
+        task.assignedTo.forEach((labellerId, index1) =>{
           var thisLabeller = null
           props.labellers.forEach(labeller => {
             if (labeller.task === task._id && labeller._id === labellerId){
@@ -57,23 +58,23 @@ const TaskList = props => {
             }
           })
           if (thisLabeller){
-            console.log(thisLabeller, task, labellerId, col % 4)
+            // console.log(thisLabeller, task, labellerId, col % 4)
             // console.log(thisLabeller.labels.length)
             switch (col % 4){
               case 0:
-                col1.push(<div key={ col % 4 }><img src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
+                col1.push(<div key={ index1 }><img alt={ thisLabeller.name } src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
                 break
               case 1:
-                col2.push(<div key={ col % 4 }><img src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
+                col2.push(<div key={ index1 }><img alt={ thisLabeller.name } src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
                 break;
               case 2:
-                col3.push(<div key={ col % 4 }><img src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
+                col3.push(<div key={ index1 }><img alt={ thisLabeller.name } src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
                 break;
               case 3:
-                col4.push(<div key={ col % 4 }><img src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
+                col4.push(<div key={ index1 }><img alt={ thisLabeller.name } src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
                 break;
               // case 4:
-              //   col5.push(<div key={ col % 4 }><img src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
+              //   col5.push(<div key={ index1 }><img alt={ thisLabeller.name } src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
               //   break;
             }
           }
@@ -83,7 +84,7 @@ const TaskList = props => {
       rows.push(
         <tr 
           key = { index } 
-          onClick = { () => console.log(task) }
+          // onClick = { () => console.log(task) }
           >
           <td className="col-3">
             <div className="row">
@@ -125,6 +126,7 @@ const TaskList = props => {
                       title="Download Task"
                       placement="bottom"
                       classes={{ tooltip: classes.tooltip }}
+                      onClick = { () => props.downloadTask(task) }
                     >
                       <IconButton
                         aria-label="Download"
@@ -142,6 +144,7 @@ const TaskList = props => {
                       title="Edit Task"
                       placement="bottom"
                       classes={{ tooltip: classes.tooltip }}
+                      onClick = { () => props.editTask(task) }
                     >
                       <IconButton
                         aria-label="Edit"
@@ -161,6 +164,7 @@ const TaskList = props => {
                         title="Unarchive Task"
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
+                        onClick = { () => props.archiveTask(task) }
                       >
                         <IconButton
                           aria-label="Unarchive"
@@ -179,6 +183,7 @@ const TaskList = props => {
                         title="Archive Task"
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
+                        onClick = { () => props.archiveTask(task) }
                       >
                         <IconButton
                           aria-label="Archive"
@@ -197,6 +202,11 @@ const TaskList = props => {
                       title="Delete Task"
                       placement="bottom"
                       classes={{ tooltip: classes.tooltip }}
+                      onClick = { () => {
+                        const confirmed = window.confirm(`Do you really want to delete the task: ${ task.name }?`); 
+                        if (confirmed)
+                          props.deleteTask(task) 
+                      }}
                     >
                       <IconButton
                         aria-label="Delete"

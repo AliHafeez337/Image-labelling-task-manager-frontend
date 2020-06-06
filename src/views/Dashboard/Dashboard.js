@@ -7,6 +7,9 @@ import AssignedTasks from './DashboardComponents/assignedTasks';
 import ArchivedTasks from './DashboardComponents/archivedTasks';
 import TaskList from './DashboardComponents/detailedList';
 
+import { saveAs } from 'file-saver';
+// const FileSaver = require('../../assets/file-saver');
+
 class Dashboard extends React.Component {
   constructor(props) {
     super(props);
@@ -41,6 +44,8 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
+    // var blob = new Blob(["Hello, world!"], {type: "text/plain;charset=utf-8"});
+    // saveAs(blob, "hello world.txt");
     axios.get('/dashboard/admin')
       .then(res => {
         if (res.data.length > 0){
@@ -120,6 +125,52 @@ class Dashboard extends React.Component {
       })
   }
 
+  handleDownloadTask = (task) => {
+    console.log(task)
+  }
+
+  handleEditTask = (task) => {
+    console.log(task)
+  }
+
+  handleArchiveTask = (task) => {
+    var body = {...task}
+    if (task.archived){
+      // unarchive task
+      body.archived = false
+    } else {
+      // arachive task
+      body.archived = true
+    }
+    axios.patch('/task/update?id=' + task._id, body)
+      .then(res => {
+        if (res.data.msg){
+          this.state.tasks.forEach((value, index) => {
+            if (value._id === res.data.dat._id){
+              var a = [...this.state.tasks]
+              a[index] = res.data.dat
+              this.setState({ tasks: a })
+            }
+          })
+        }
+      })
+  }
+
+  handleDeleteTask = (task) => {
+    axios.delete('/task/delete/' + task._id)
+      .then(res => {
+        if (res.data){
+          this.state.tasks.forEach((value, index) => {
+            if (value._id === res.data._id){
+              var a = [...this.state.tasks]
+              a.splice(index,1);
+              this.setState({ tasks: a })
+            }
+          })
+        }
+      })
+  }
+
   render() {
     return (
       <div>
@@ -151,6 +202,10 @@ class Dashboard extends React.Component {
               tasks = { this.state.tasks }
               // labellers = { this.state.labellersData }
               labellers = { this.state.allLabellers }
+              downloadTask = { this.handleDownloadTask }
+              editTask = { this.handleEditTask }
+              archiveTask = { this.handleArchiveTask }
+              deleteTask = { this.handleDeleteTask }
             />
           </div>
         </div>
