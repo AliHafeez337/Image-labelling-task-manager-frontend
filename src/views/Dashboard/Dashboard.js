@@ -175,13 +175,15 @@ class Dashboard extends React.Component {
   }
 
   handleArchiveTask = (task) => {
-    var body = {...task}
+    var body = {...task}, b = this.state.archivedTasks
     if (task.archived){
       // unarchive task
       body.archived = false
+      b--
     } else {
       // arachive task
       body.archived = true
+      b++
     }
     axios.patch('/task/update?id=' + task._id, body)
       .then(res => {
@@ -190,7 +192,7 @@ class Dashboard extends React.Component {
             if (value._id === res.data.dat._id){
               var a = [...this.state.tasks]
               a[index] = res.data.dat
-              this.setState({ tasks: a })
+              this.setState({ tasks: a, archivedTasks: b })
             }
           })
         }
