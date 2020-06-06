@@ -47,7 +47,9 @@ class UserP extends React.Component {
       errrMsg:'',
       imageInputAllow:false,
       selectedFile: null,
-      imageSuccess:false
+      imageSuccess:false,
+
+      profilePhotoVar:null
     }
   }
   data={name:'',
@@ -72,6 +74,13 @@ class UserP extends React.Component {
         this.setState({userProfile:res.data});
         this.data.name=res.data.name;
         this.data.email=res.data.email;
+        if(res.data.photo){
+          this.setState({profilePhotoVar:url1.apiURL+'/'+res.data.photo})
+        }
+        else{
+          this.setState({profilePhotoVar:avatar})
+        }
+        console.log(url1.apiURL+'/'+res.data.photo);
         console.log(this.state.userProfile);
       });
     
@@ -153,6 +162,12 @@ class UserP extends React.Component {
       })
       .then(res => {
         console.log(res.data);
+        if(res.data.photo){
+          this.setState({profilePhotoVar:url1.apiURL+'/'+res.data.photo})
+        }
+        else{
+          this.setState({profilePhotoVar:avatar})
+        }
         if(res.data.msg){
           this.setState({errr:false});
           this.setState({succes:true});
@@ -169,7 +184,6 @@ class UserP extends React.Component {
     const classes=makeStyles(this.state.styles);
     let notifi;
     let imgInput;
-    let profilePhoto;
     if(this.state.succes){
       notifi=<SnackbarContent message={'SUCCESS: '+this.state.succesMsg} close color="success"/>;
     }
@@ -200,7 +214,7 @@ class UserP extends React.Component {
             <Card profile>
               <CardAvatar profile>
                 <a href="#pablo" onClick={e => e.preventDefault()}>
-                  <img src={avatar} alt="..." />
+                  <img src={this.state.profilePhotoVar} alt="..." />
                 </a>
               </CardAvatar>
               <div>

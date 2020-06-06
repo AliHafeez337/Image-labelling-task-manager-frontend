@@ -49,10 +49,11 @@ class AddTask extends React.Component {
       TaskName:null,
       TaskAssignedTo:null,
       TaskLabels:null,
-      TaskDate:null
+      TaskDate:null,
     }
   }
 taskData={tname:null,tlabels:null,tassigned:[],tdate:null}
+taskPhotos=[];
   handleName = event => {
     this.taskData.tname= event.target.value;
   }
@@ -135,7 +136,8 @@ taskData={tname:null,tlabels:null,tassigned:[],tdate:null}
   }
 
   checkMimeType=(event)=>{
-    //getting file object
+    if(event.target.files[0]){
+      //getting file object
     let files = event.target.files[0] 
     //define message container
     let err = ''
@@ -155,6 +157,7 @@ taskData={tname:null,tlabels:null,tassigned:[],tdate:null}
          return false; 
     }
    return true;
+    }
   
   }
 
@@ -163,13 +166,12 @@ taskData={tname:null,tlabels:null,tassigned:[],tdate:null}
       this.setState({
         selectedFile: event.target.files[0],
         loaded: 0,
-      },()=>{
-          this.imageArray.push(this.state.selectedFile)
-          
       })
     }
   }
   onClickHandler = () => {
+    this.setState({selectedFiles: []});
+    this.taskPhotos=[];
     axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
     console.log(this.state.selectedFile)
     const data1 = new FormData() 
@@ -182,7 +184,9 @@ taskData={tname:null,tlabels:null,tassigned:[],tdate:null}
       })
       .then(res => {
         console.log(res.data);
+        this.taskPhotos=res.data.photos;
         this.setState({buttonEnable:false})
+        this.imageArray.push(this.state.selectedFile)
         this.setState({selectedFiles: this.imageArray})
       })
   }
@@ -191,6 +195,7 @@ taskData={tname:null,tlabels:null,tassigned:[],tdate:null}
     let userList=[];
     let userRecieved=[];
     let userObj={};
+    this.setState({selectedFiles: []});
     axios.post('/task/new')
       .then(res => {
         console.log(res.data);
@@ -208,7 +213,27 @@ taskData={tname:null,tlabels:null,tassigned:[],tdate:null}
       });
     
   }
+  deletePhotoO(index){
+    axios.patch('/taskImage/delete?photoUrl='+this.taskPhotos[index].url+'&id='+this.state.taskId)
+      .then(res => {
+        if(res.data.msg){
+          this.setState({errr:false});
+          this.setState({succes:true});
+          this.setState({succesMsg:res.data.msg});
+          this.imageArray.splice(index,1);
+          this.setState({selectedFiles: this.imageArray})
+        }
+        else if(res.data.errmsg){
+          this.setState({errr:true});
+          this.setState({succes:false});
+          this.setState({errrMsg:res.data.errmsg[0].msg});
+          
+        }
+      });
+
+  }
   componentWillUnmount(){
+    this.setState({selectedFiles: []});
     if(this.state.selectedFiles.length<0 || this.taskData.tname===null || this.taskData.tname==='' || this.taskData.tlabels===null || this.taskData.tlabels===[]){
       axios.delete('/task/delete/'+this.state.taskId)
       .then(res => {
@@ -220,9 +245,10 @@ taskData={tname:null,tlabels:null,tassigned:[],tdate:null}
     makeStyles(this.state.styles);
     let notifi;
     let items;
-    items = this.state.selectedFiles.map((item) =>
-    <li>{item.name}</li>
+    items = this.state.selectedFiles.map((item,index) =>
+      <li>{item.name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Button color="danger" round onClick={()=>this.deletePhotoO(index)}>Delete</Button></li>
     );
+    
     if(this.state.succes){
       notifi=<SnackbarContent message={'SUCCESS: '+this.state.succesMsg} close color="success"/>;
     }
