@@ -8,7 +8,6 @@ import ArchivedTasks from './DashboardComponents/archivedTasks';
 import TaskList from './DashboardComponents/detailedList';
 
 import { saveAs } from 'file-saver';
-// const FileSaver = require('../../assets/file-saver');
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -44,8 +43,6 @@ class Dashboard extends React.Component {
   }
 
   componentDidMount() {
-    // var blob = new Blob(["Hello, world!"], {type: "text/plain;charset=utf-8"});
-    // saveAs(blob, "hello world.txt");
     axios.get('/dashboard/admin')
       .then(res => {
         if (res.data.length > 0){
@@ -126,7 +123,51 @@ class Dashboard extends React.Component {
   }
 
   handleDownloadTask = (task) => {
-    console.log(task)
+    // console.log(task, this.state.allLabellers)
+    var mainObj = {...task}
+    mainObj.assignedTo = []
+    task.assignedTo.forEach(labellerId => {
+      this.state.allLabellers.forEach(labeller => {
+        if (labellerId === labeller._id){
+          delete labeller.archived
+          delete labeller.createdAt
+          delete labeller.usertype
+          delete labeller.task
+          labeller.labels.forEach((label, index) => {
+            var thisLabel = {...label}
+            delete thisLabel['@context']
+            delete thisLabel.id
+            delete thisLabel.label
+            delete thisLabel.labeller
+            delete thisLabel.picture
+            delete thisLabel.target
+            delete thisLabel.task
+            delete thisLabel.type
+            task.labels.forEach(l => {
+              if (l._id === label.label){
+                thisLabel.category = l.category
+                thisLabel.labelled = l.done
+                thisLabel.name = l.name
+                thisLabel._id = l._id
+              }
+            })
+            labeller.labels[index] = thisLabel
+            task.photos.forEach(photo => {
+              if (photo._id === label.picture){
+                thisLabel.photo = photo.url
+              }
+            })
+          })
+          mainObj.assignedTo.push(labeller)
+        }
+      })
+    })
+    delete mainObj.labels
+    delete mainObj.photos
+    // console.log(mainObj)
+    var blob = new Blob([JSON.stringify(mainObj, undefined, 4)], {type: "text/plain;charset=utf-8"});
+    // var blob = new Blob([JSON.stringify(mainObj, undefined, 4)], {type: "application/json"});
+    saveAs(blob, task.name);
   }
 
   handleEditTask = (task) => {
