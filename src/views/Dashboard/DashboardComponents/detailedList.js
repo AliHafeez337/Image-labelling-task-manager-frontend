@@ -62,19 +62,19 @@ const TaskList = props => {
             // console.log(thisLabeller.labels.length)
             switch (col % 4){
               case 0:
-                col1.push(<div key={ index1 }><img alt={ thisLabeller.name } src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
+                col1.push(<div key={ index1 }><img alt={ thisLabeller.name } src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ (thisLabeller.labels.length / task.labels.length * 100).toFixed(0) }%</Progress></div></div>)
                 break
               case 1:
-                col2.push(<div key={ index1 }><img alt={ thisLabeller.name } src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
+                col2.push(<div key={ index1 }><img alt={ thisLabeller.name } src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ (thisLabeller.labels.length / task.labels.length * 100).toFixed(0) }%</Progress></div></div>)
                 break;
               case 2:
-                col3.push(<div key={ index1 }><img alt={ thisLabeller.name } src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
+                col3.push(<div key={ index1 }><img alt={ thisLabeller.name } src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ (thisLabeller.labels.length / task.labels.length * 100).toFixed(0) }%</Progress></div></div>)
                 break;
               case 3:
-                col4.push(<div key={ index1 }><img alt={ thisLabeller.name } src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
+                col4.push(<div key={ index1 }><img alt={ thisLabeller.name } src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ (thisLabeller.labels.length / task.labels.length * 100).toFixed(0) }%</Progress></div></div>)
                 break;
               // case 4:
-              //   col5.push(<div key={ index1 }><img alt={ thisLabeller.name } src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
+              //   col5.push(<div key={ index1 }><img alt={ thisLabeller.name } src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ (thisLabeller.labels.length / task.labels.length * 100).toFixed(0) }%</Progress></div></div>)
               //   break;
             }
           }
@@ -111,7 +111,7 @@ const TaskList = props => {
                 </div>
                 <div className="row">
                   <div className="col-lg-12">
-                    <Progress max="100" color="success" value={ task.percent }>{ task.percent }%</Progress>
+                    <Progress max="100" color="success" value={ task.percent }>{ (task.percent).toFixed(0) }%</Progress>
                   </div>
                 </div>
                 {/* <div className="row">
