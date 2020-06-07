@@ -17,6 +17,7 @@ import UnarchiveIcon from '@material-ui/icons/Unarchive';
 import GetAppIcon from '@material-ui/icons/GetApp';
 
 import { apiURL } from './../../../config';
+import './bold.css'
 
 const styles = {
   cardCategoryWhite: {
@@ -41,15 +42,16 @@ const useStyles = makeStyles(styles);
 
 const TaskList = props => {
   const classes = useStyles();
-  console.log(props.labellers)
+  // console.log(props.labellers)
 
   var rows = []
   if (props.tasks){
     props.tasks.forEach((task, index) => {
-      var col = 4, col1 = [], col2 = [], col3 = [], col4 = [], col5 = []
+      var col = 4, col1 = [], col2 = [], col3 = [], col4 = []
+      // var col5 = []
 
       if(props.labellers.length > 0){
-        task.assignedTo.forEach(labellerId =>{
+        task.assignedTo.forEach((labellerId, index1) =>{
           var thisLabeller = null
           props.labellers.forEach(labeller => {
             if (labeller.task === task._id && labeller._id === labellerId){
@@ -57,24 +59,26 @@ const TaskList = props => {
             }
           })
           if (thisLabeller){
-            console.log(thisLabeller, task, labellerId, col % 4)
+            // console.log(thisLabeller, task, labellerId, col % 4)
             // console.log(thisLabeller.labels.length)
             switch (col % 4){
               case 0:
-                col1.push(<div key={ col % 4 }><img src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
+                col1.push(<div key={ index1 }><img alt={ thisLabeller.name } src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span className='bold'>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span className='bold'>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ (thisLabeller.labels.length / task.labels.length * 100).toFixed(0) }%</Progress></div></div>)
                 break
               case 1:
-                col2.push(<div key={ col % 4 }><img src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
+                col2.push(<div key={ index1 }><img alt={ thisLabeller.name } src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span className='bold'>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span className='bold'>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ (thisLabeller.labels.length / task.labels.length * 100).toFixed(0) }%</Progress></div></div>)
                 break;
               case 2:
-                col3.push(<div key={ col % 4 }><img src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
+                col3.push(<div key={ index1 }><img alt={ thisLabeller.name } src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span className='bold'>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span className='bold'>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ (thisLabeller.labels.length / task.labels.length * 100).toFixed(0) }%</Progress></div></div>)
                 break;
               case 3:
-                col4.push(<div key={ col % 4 }><img src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
+                col4.push(<div key={ index1 }><img alt={ thisLabeller.name } src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span className='bold'>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span className='bold'>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ (thisLabeller.labels.length / task.labels.length * 100).toFixed(0) }%</Progress></div></div>)
                 break;
               // case 4:
-              //   col5.push(<div key={ col % 4 }><img src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span style={{ 'fontWeight': 'bold'}}>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span style={{ 'fontWeight': 'bold'}}>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ thisLabeller.labels.length / task.labels.length * 100 }%</Progress></div></div>)
+              //   col5.push(<div key={ index1 }><img alt={ thisLabeller.name } src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span className='bold'>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span className='bold'>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ (thisLabeller.labels.length / task.labels.length * 100).toFixed(0) }%</Progress></div></div>)
               //   break;
+              default:
+                break;
             }
           }
           col++ 
@@ -83,39 +87,39 @@ const TaskList = props => {
       rows.push(
         <tr 
           key = { index } 
-          onClick = { () => console.log(task) }
+          // onClick = { () => console.log(task) }
           >
           <td className="col-3">
             <div className="row">
               <div className="col-lg-3 col-md-4 col-sm-4 col-xs-6">
                 <div className="row">
                   <div className="col-lg-12">
-                    <span style={{'fontWeight':'bold'}}>Name:</span>&nbsp;{ task.name }
+                    <span className='bold'>Name:</span>&nbsp;{ task.name }
                   </div>
                 </div>
                 <div className="row">
                   <div className="col-lg-12">
-                    <span style={{'fontWeight':'bold'}}>Labels:</span>&nbsp;{ task.labels.length }&nbsp;&nbsp;<span style={{'fontWeight':'bold'}}>Photos:</span>&nbsp;{ task.photos.length }
+                    <span className='bold'>Labels:</span>&nbsp;{ task.labels.length }&nbsp;&nbsp;<span className='bold'>Photos:</span>&nbsp;{ task.photos.length }
                   </div>
                 </div>
                 <div className="row">
                   <div className="col-lg-12">
-                    <span style={{'fontWeight':'bold'}}>Created At:</span>&nbsp;{ task.createdAt ? task.createdAt.substr(0, 10) : task.createdAt }
+                    <span className='bold'>Created At:</span>&nbsp;{ task.createdAt ? task.createdAt.substr(0, 10) : task.createdAt }
                   </div>
                 </div>
                 <div className="row">
                   <div className="col-lg-12">
-                    <span style={{'fontWeight':'bold'}}>Due Date:</span>&nbsp;{ task.dueDate ? task.dueDate.substr(0, 10) : task.dueDate }
+                    <span className='bold'>Due Date:</span>&nbsp;{ task.dueDate ? task.dueDate.substr(0, 10) : task.dueDate }
                   </div>
                 </div>
                 <div className="row">
                   <div className="col-lg-12">
-                    <Progress max="100" color="success" value={ task.percent }>{ task.percent }%</Progress>
+                    <Progress max="100" color="success" value={ task.percent }>{ (task.percent).toFixed(0) }%</Progress>
                   </div>
                 </div>
                 {/* <div className="row">
                   <div className="col-lg-12">
-                    <span style={{'fontWeight':'bold'}}>Archived?:</span>&nbsp;{ task.archived }
+                    <span className='bold'>Archived?:</span>&nbsp;{ task.archived }
                   </div>
                 </div> */}
                 <div className="row">
@@ -125,6 +129,7 @@ const TaskList = props => {
                       title="Download Task"
                       placement="bottom"
                       classes={{ tooltip: classes.tooltip }}
+                      onClick = { () => props.downloadTask(task) }
                     >
                       <IconButton
                         aria-label="Download"
@@ -142,6 +147,7 @@ const TaskList = props => {
                       title="Edit Task"
                       placement="bottom"
                       classes={{ tooltip: classes.tooltip }}
+                      onClick = { () => props.editTask(task) }
                     >
                       <IconButton
                         aria-label="Edit"
@@ -161,6 +167,7 @@ const TaskList = props => {
                         title="Unarchive Task"
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
+                        onClick = { () => props.archiveTask(task) }
                       >
                         <IconButton
                           aria-label="Unarchive"
@@ -179,6 +186,7 @@ const TaskList = props => {
                         title="Archive Task"
                         placement="bottom"
                         classes={{ tooltip: classes.tooltip }}
+                        onClick = { () => props.archiveTask(task) }
                       >
                         <IconButton
                           aria-label="Archive"
@@ -197,6 +205,11 @@ const TaskList = props => {
                       title="Delete Task"
                       placement="bottom"
                       classes={{ tooltip: classes.tooltip }}
+                      onClick = { () => {
+                        const confirmed = window.confirm(`Do you really want to delete the task: ${ task.name }?`); 
+                        if (confirmed)
+                          props.deleteTask(task) 
+                      }}
                     >
                       <IconButton
                         aria-label="Delete"

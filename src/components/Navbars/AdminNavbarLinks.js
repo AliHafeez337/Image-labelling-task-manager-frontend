@@ -68,6 +68,11 @@ const AdminNavbarLinks = (props) => {
       {/* {console.log(props.token)} */}
       <div className={classes.searchWrapper} style={{paddingRight:'380px' }}>
         <CustomInput
+          value={ props.search } 
+          onChange={ e => {
+            console.log(e.target.value)
+            props.onSearchChange(e.target.value) 
+          }}
           formControlProps={{
             className: classes.margin + " " + classes.search
           }}
@@ -155,8 +160,14 @@ const AdminNavbarLinks = (props) => {
 
 const mapStoreToProps = state => {
   return {
-    token: state.token
+    search: state.search
   }
 }
 
-export default connect(mapStoreToProps, null)(withRouter(AdminNavbarLinks))
+const mapPropsToStore = dispatch => {
+  return {
+    onSearchChange: search => dispatch({type: 'SETSEARCH', search})
+  }
+}
+
+export default connect(mapStoreToProps, mapPropsToStore)(withRouter(AdminNavbarLinks))
