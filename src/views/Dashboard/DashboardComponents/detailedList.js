@@ -77,6 +77,8 @@ const TaskList = props => {
               // case 4:
               //   col5.push(<div key={ index1 }><img alt={ thisLabeller.name } src={ apiURL + '/' + thisLabeller.photo } style={{"width":"100%"}} /><div><span className='bold'>Name:</span><span>&nbsp;{ thisLabeller.name }</span><br/><span className='bold'>Email:</span><span>&nbsp;{ thisLabeller.email }</span><br /><Progress max="100" color="success" value={ thisLabeller.labels.length / task.labels.length * 100 }>{ (thisLabeller.labels.length / task.labels.length * 100).toFixed(0) }%</Progress></div></div>)
               //   break;
+              default:
+                break;
             }
           }
           col++ 

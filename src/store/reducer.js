@@ -11,6 +11,12 @@ const reducer = (state = initialState, action) => {
       task: action.task
     }
   }
+  else if (action.type === 'SETSEARCH'){
+    console.log(action.search)
+    return {
+      search: action.search
+    }
+  }
   return state;
 }
 

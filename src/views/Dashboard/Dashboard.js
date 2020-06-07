@@ -1,13 +1,15 @@
 import React from "react";
 
+import { connect } from 'react-redux';
+
+import { saveAs } from 'file-saver';
+
 import axios from '../../axiosSet';
 import TotalTasks from './DashboardComponents/totalTasks';
 import PercentageTasks from './DashboardComponents/percentTasks';
 import AssignedTasks from './DashboardComponents/assignedTasks';
 import ArchivedTasks from './DashboardComponents/archivedTasks';
 import TaskList from './DashboardComponents/detailedList';
-
-import { saveAs } from 'file-saver';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -217,6 +219,7 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div>
+        <p>{ this.props.search }</p>
         <div className="row">
           <div className="col-lg-3 col-md-4 col-sm-6">
             <TotalTasks
@@ -257,4 +260,10 @@ class Dashboard extends React.Component {
   }
 }
 
-export default Dashboard
+const mapStoreToProps = state => {
+  return {
+    search: state.search
+  }
+}
+
+export default connect(mapStoreToProps, null)(Dashboard)
