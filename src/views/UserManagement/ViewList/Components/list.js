@@ -42,7 +42,6 @@ const ListOfUsers = props => {
 
   var rows = []
   if (props.users){ 
-    var rows = []
     props.users.forEach((user, index) => {
       rows.push(
         <tr 
