@@ -24,6 +24,7 @@ import { Route, Switch, Redirect, BrowserRouter } from "react-router-dom";
 import Admin from "layouts/Admin.js";
 import Login from "./views/Login/login.js";
 import SingUp from "./views/SingUp/singup.js";
+import EditTask from "./views/Task/EditTask/editTask.js"
 
 import 'jquery/src/jquery';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -52,6 +53,7 @@ ReactDOM.render(
           <Route path="/l" component={Admin} />
           <Route path="/login" component={Login} />
           <Route path="/signup" component={SingUp} />
+          <Route path="/editTask/:id" component={EditTask} />
           {/* {getToken() ? <Route path="/login" component={Login} /> : <Redirect to="/admin/dashboard" />}
           {getToken() ? <Route path="/signup" component={SingUp} /> : <Redirect to="/admin/dashboard" />} */}
           <Redirect from="/" to="/l/dashboard" />
