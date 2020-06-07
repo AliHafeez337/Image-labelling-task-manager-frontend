@@ -9,9 +9,9 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
-import CustomTabs from "components/CustomTabs/CustomTabs.js";
-import NavigateBefore from "@material-ui/icons/NavigateBefore";
-import NavigateNext from "@material-ui/icons/NavigateNext";
+// import CustomTabs from "components/CustomTabs/CustomTabs.js";
+// import NavigateBefore from "@material-ui/icons/NavigateBefore";
+// import NavigateNext from "@material-ui/icons/NavigateNext";
 
 import axios from '../../../axiosSet'
 import { apiURL } from '../../../config';

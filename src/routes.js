@@ -20,19 +20,15 @@ import Dashboard from "@material-ui/icons/Dashboard";
 import Home from "@material-ui/icons/Home";
 import Person from "@material-ui/icons/Person";
 import Assignment from "@material-ui/icons/Assignment";
-// import LibraryBooks from "@material-ui/icons/LibraryBooks";
-// import BubbleChart from "@material-ui/icons/BubbleChart";
-// import LocationOn from "@material-ui/icons/LocationOn";
-// import Notifications from "@material-ui/icons/Notifications";
-// import Unarchive from "@material-ui/icons/Unarchive";
-// import Language from "@material-ui/icons/Language";
+import PeopleIcon from '@material-ui/icons/People';
 
 // core components/views for Admin layout
-import DashboardPage from "views/Dashboard/Dashboard.js";
-import HomePage from "views/Dashboard/Home.js"
-import UserProfile from "views/UserProfile/UserProfile.js";
-import Task from 'views/Task/task'
-import AddTask from 'views/Task/AddTask/addTask.js'
+import DashboardPage from "views/Dashboard/Dashboard";
+import HomePage from "views/Dashboard/Home"
+import UserProfile from "views/UserProfile/UserProfile";
+import Task from 'views/Task/task';
+import AddTask from 'views/Task/AddTask/addTask';
+import UsersView from 'views/UserManagement/ViewList/UsersView';
 
 const adminDashboardRoutes = [
   {
@@ -68,6 +64,13 @@ const adminDashboardRoutes = [
     name: "User Profile",
     icon: Person,
     component: UserProfile,
+    layout: "/l"
+  },
+  {
+    path: "/view/users",
+    name: "Users List",
+    icon: PeopleIcon,
+    component: UsersView,
     layout: "/l"
   }
 ];

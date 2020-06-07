@@ -1,5 +1,9 @@
 import React from "react";
 
+import { connect } from 'react-redux';
+
+import { saveAs } from 'file-saver';
+
 import axios from '../../axiosSet';
 import TotalTasks from './DashboardComponents/totalTasks';
 import PercentageTasks from './DashboardComponents/percentTasks';
@@ -120,9 +124,102 @@ class Dashboard extends React.Component {
       })
   }
 
+  handleDownloadTask = (task) => {
+    // console.log(task, this.state.allLabellers)
+    var mainObj = {...task}
+    mainObj.assignedTo = []
+    task.assignedTo.forEach(labellerId => {
+      this.state.allLabellers.forEach(labeller => {
+        if (labellerId === labeller._id){
+          delete labeller.archived
+          delete labeller.createdAt
+          delete labeller.usertype
+          delete labeller.task
+          labeller.labels.forEach((label, index) => {
+            var thisLabel = {...label}
+            delete thisLabel['@context']
+            delete thisLabel.id
+            delete thisLabel.label
+            delete thisLabel.labeller
+            delete thisLabel.picture
+            delete thisLabel.target
+            delete thisLabel.task
+            delete thisLabel.type
+            task.labels.forEach(l => {
+              if (l._id === label.label){
+                thisLabel.category = l.category
+                thisLabel.labelled = l.done
+                thisLabel.name = l.name
+                thisLabel._id = l._id
+              }
+            })
+            labeller.labels[index] = thisLabel
+            task.photos.forEach(photo => {
+              if (photo._id === label.picture){
+                thisLabel.photo = photo.url
+              }
+            })
+          })
+          mainObj.assignedTo.push(labeller)
+        }
+      })
+    })
+    delete mainObj.labels
+    delete mainObj.photos
+    // console.log(mainObj)
+    var blob = new Blob([JSON.stringify(mainObj, undefined, 4)], {type: "text/plain;charset=utf-8"});
+    // var blob = new Blob([JSON.stringify(mainObj, undefined, 4)], {type: "application/json"});
+    saveAs(blob, task.name);
+  }
+
+  handleEditTask = (task) => {
+    console.log(task)
+  }
+
+  handleArchiveTask = (task) => {
+    var body = {...task}, b = this.state.archivedTasks
+    if (task.archived){
+      // unarchive task
+      body.archived = false
+      b--
+    } else {
+      // arachive task
+      body.archived = true
+      b++
+    }
+    axios.patch('/task/update?id=' + task._id, body)
+      .then(res => {
+        if (res.data.msg){
+          this.state.tasks.forEach((value, index) => {
+            if (value._id === res.data.dat._id){
+              var a = [...this.state.tasks]
+              a[index] = res.data.dat
+              this.setState({ tasks: a, archivedTasks: b })
+            }
+          })
+        }
+      })
+  }
+
+  handleDeleteTask = (task) => {
+    axios.delete('/task/delete/' + task._id)
+      .then(res => {
+        if (res.data){
+          this.state.tasks.forEach((value, index) => {
+            if (value._id === res.data._id){
+              var a = [...this.state.tasks]
+              a.splice(index,1);
+              this.setState({ tasks: a })
+            }
+          })
+        }
+      })
+  }
+
   render() {
     return (
       <div>
+        <p>{ this.props.search }</p>
         <div className="row">
           <div className="col-lg-3 col-md-4 col-sm-6">
             <TotalTasks
@@ -151,6 +248,10 @@ class Dashboard extends React.Component {
               tasks = { this.state.tasks }
               // labellers = { this.state.labellersData }
               labellers = { this.state.allLabellers }
+              downloadTask = { this.handleDownloadTask }
+              editTask = { this.handleEditTask }
+              archiveTask = { this.handleArchiveTask }
+              deleteTask = { this.handleDeleteTask }
             />
           </div>
         </div>
@@ -159,4 +260,10 @@ class Dashboard extends React.Component {
   }
 }
 
-export default Dashboard
+const mapStoreToProps = state => {
+  return {
+    search: state.search
+  }
+}
+
+export default connect(mapStoreToProps, null)(Dashboard)
