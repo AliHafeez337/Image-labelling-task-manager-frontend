@@ -2,7 +2,6 @@ import React from "react";
 import classNames from "classnames";
 import { withRouter } from "react-router-dom";
 // import { Link } from "react-router-dom";
-import { connect } from 'react-redux';
 
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -68,11 +67,6 @@ const AdminNavbarLinks = (props) => {
       {/* {console.log(props.token)} */}
       <div className={classes.searchWrapper} style={{paddingRight:'380px' }}>
         <CustomInput
-          value={ props.search } 
-          onChange={ e => {
-            console.log(e.target.value)
-            props.onSearchChange(e.target.value) 
-          }}
           formControlProps={{
             className: classes.margin + " " + classes.search
           }}
@@ -158,16 +152,4 @@ const AdminNavbarLinks = (props) => {
   );
 }
 
-const mapStoreToProps = state => {
-  return {
-    search: state.search
-  }
-}
-
-const mapPropsToStore = dispatch => {
-  return {
-    onSearchChange: search => dispatch({type: 'SETSEARCH', search})
-  }
-}
-
-export default connect(mapStoreToProps, mapPropsToStore)(withRouter(AdminNavbarLinks))
+export default withRouter(AdminNavbarLinks)

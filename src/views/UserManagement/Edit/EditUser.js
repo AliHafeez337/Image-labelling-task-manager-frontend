@@ -62,7 +62,6 @@ class EditUser extends React.Component{
         name: this.props.location.state.user.name,
         usertype: this.props.location.state.user.usertype
       })
-      const classes=makeStyles(this.state.styles);
     }
   }
   

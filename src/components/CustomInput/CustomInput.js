@@ -1,4 +1,6 @@
 import React from "react";
+import { connect } from 'react-redux';
+
 import classNames from "classnames";
 import PropTypes from "prop-types";
 // @material-ui/core components
@@ -14,7 +16,7 @@ import styles from "assets/jss/material-dashboard-react/components/customInputSt
 
 const useStyles = makeStyles(styles);
 
-export default function CustomInput(props) {
+const CustomInput = (props) => {
   const classes = useStyles();
   const {
     formControlProps,
@@ -38,6 +40,12 @@ export default function CustomInput(props) {
   const marginTop = classNames({
     [classes.marginTop]: labelText === undefined
   });
+  
+  const handleName = e => {
+    // console.log(e.target.value)
+    props.onSearchChange(e.target.value)
+  }
+
   return (
     <FormControl
       {...formControlProps}
@@ -53,6 +61,8 @@ export default function CustomInput(props) {
         </InputLabel>
       ) : null}
       <Input
+        // value={ props.search }  
+        onChange={ handleName }
         classes={{
           root: marginTop,
           disabled: classes.disabled,
@@ -79,3 +89,11 @@ CustomInput.propTypes = {
   error: PropTypes.bool,
   success: PropTypes.bool
 };
+
+const mapPropsToStore = dispatch => {
+  return {
+    onSearchChange: search => dispatch({type: 'SETSEARCH', search})
+  }
+}
+
+export default connect(null, mapPropsToStore)(CustomInput)
