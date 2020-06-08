@@ -8,15 +8,37 @@ class HomePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      myOriginalTasks: null,
       mytasks: null
     }
   }
 
   componentDidMount() {
+    console.log(this.props.search)
     axios.get('/task/mine/')
       .then(res => {
-        this.setState({ mytasks: res.data })
+        this.setState({ myOriginalTasks: res.data, mytasks: res.data })
       })
+  }
+
+  componentDidUpdate() {
+    console.log('COMPONENT UPDATED')
+    // console.log(this.props.search)
+
+    var result = [], match = new RegExp(this.props.search, 'gi')
+    
+    this.state.myOriginalTasks.forEach(task => {
+      if (task.name.search(match) > -1){
+        result.push(task)
+      }
+    })
+    
+    if (result.length !== this.state.mytasks.length){
+      // console.log(result, 'not equal')
+      this.setState({ mytasks: result })
+    }
+
+    return true
   }
 
   handleRowSelect = (value, index) => {
@@ -44,7 +66,8 @@ class HomePage extends React.Component {
 
 const mapStoreToProps = state => {
   return {
-    task: state.task
+    task: state.task,
+    search: state.search
   }
 }
 

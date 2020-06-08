@@ -12,7 +12,7 @@ const reducer = (state = initialState, action) => {
     }
   }
   else if (action.type === 'SETSEARCH'){
-    console.log(action.search)
+    // console.log(action.search)
     return {
       search: action.search
     }
