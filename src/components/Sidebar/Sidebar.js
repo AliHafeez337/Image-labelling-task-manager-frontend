@@ -31,6 +31,9 @@ export default function Sidebar(props) {
       {routes.map((prop, key) => {
         var activePro = " ";
         var listItemClasses;
+        if (prop.path === '/edit/user'){
+          return(<div key={ key }></div>)
+        }
         if (prop.path === "/upgrade-to-pro") {
           activePro = classes.activePro + " ";
           listItemClasses = classNames({

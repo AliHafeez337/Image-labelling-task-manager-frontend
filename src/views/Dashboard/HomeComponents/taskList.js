@@ -11,8 +11,6 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 
-import { apiURL } from './../../../config';
-
 const styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
@@ -39,7 +37,6 @@ const MyTasks = props => {
   
   var rows = []
   if (props.tasks){
-    var rows = []
     props.tasks.forEach((value, index) => {
       rows.push(
         <tr 
