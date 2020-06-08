@@ -22,7 +22,11 @@ class UsersView extends React.Component {
   }
 
   handleEditUser = user => {
-    console.log(user)
+    // console.log(user)
+    this.props.history.push({
+      pathname: '/l/edit/user',
+      state: { user }
+    })
   }
 
   handleArchiveUser = user => {
