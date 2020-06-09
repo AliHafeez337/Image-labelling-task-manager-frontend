@@ -33,6 +33,7 @@ import AddTask from 'views/Task/AddTask/addTask';
 import UsersView from 'views/UserManagement/ViewList/UsersView';
 import UsersAdd from 'views/UserManagement/Add/UserAdd';
 import EditUser from 'views/UserManagement/Edit/EditUser';
+import EditTask from 'views/Task/EditTask/editTask'
 
 const adminDashboardRoutes = [
   {
@@ -86,9 +87,16 @@ const adminDashboardRoutes = [
   },
   {
     path: "/edit/user",
-    name: "Edit Add",
+    name: "Edit User",
     icon: EditIcon,
     component: EditUser,
+    layout: "/l"
+  },
+  {
+    path: "/editTask/:id",
+    name: "Edit Task",
+    icon: EditIcon,
+    component: EditTask,
     layout: "/l"
   }
 ];
