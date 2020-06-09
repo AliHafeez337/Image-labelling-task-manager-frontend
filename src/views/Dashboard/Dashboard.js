@@ -33,6 +33,7 @@ class Dashboard extends React.Component {
           textDecoration: "none"
         }
       },
+      originalTasks: null,
       tasks: null,
       overAllPercentCompletion: null,
       totalLabels: null,
@@ -67,6 +68,7 @@ class Dashboard extends React.Component {
             }
           })
           this.setState({ 
+            originalTasks: res.data,
             tasks: res.data,
             overAllPercentCompletion: Math.round((doneLabels / totalLabels) * 100).toFixed(0),
             totalLabels,
@@ -122,6 +124,26 @@ class Dashboard extends React.Component {
           })
         }
       })
+  }
+
+  componentDidUpdate() {
+    console.log('COMPONENT UPDATED')
+    // console.log(this.props.search)
+
+    var result = [], match = new RegExp(this.props.search, 'gi')
+    
+    this.state.originalTasks.forEach(task => {
+      if (task.name.search(match) > -1){
+        result.push(task)
+      }
+    })
+    
+    if (result.length !== this.state.tasks.length){
+      // console.log(result, 'not equal')
+      this.setState({ tasks: result })
+    }
+
+    return true
   }
 
   handleDownloadTask = (task) => {

@@ -21,6 +21,8 @@ import Home from "@material-ui/icons/Home";
 import Person from "@material-ui/icons/Person";
 import Assignment from "@material-ui/icons/Assignment";
 import PeopleIcon from '@material-ui/icons/People';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import EditIcon from '@material-ui/icons/Edit';
 
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard";
@@ -29,6 +31,8 @@ import UserProfile from "views/UserProfile/UserProfile";
 import Task from 'views/Task/task';
 import AddTask from 'views/Task/AddTask/addTask';
 import UsersView from 'views/UserManagement/ViewList/UsersView';
+import UsersAdd from 'views/UserManagement/Add/UserAdd';
+import EditUser from 'views/UserManagement/Edit/EditUser';
 
 const adminDashboardRoutes = [
   {
@@ -71,6 +75,20 @@ const adminDashboardRoutes = [
     name: "Users List",
     icon: PeopleIcon,
     component: UsersView,
+    layout: "/l"
+  },
+  {
+    path: "/add/users",
+    name: "Users Add",
+    icon: PersonAddIcon,
+    component: UsersAdd,
+    layout: "/l"
+  },
+  {
+    path: "/edit/user",
+    name: "Edit Add",
+    icon: EditIcon,
+    component: EditUser,
     layout: "/l"
   }
 ];
