@@ -33,72 +33,91 @@ import AddTask from 'views/Task/AddTask/addTask';
 import UsersView from 'views/UserManagement/ViewList/UsersView';
 import UsersAdd from 'views/UserManagement/Add/UserAdd';
 import EditUser from 'views/UserManagement/Edit/EditUser';
-import EditTask from 'views/Task/EditTask/editTask'
-
-const adminDashboardRoutes = [
-  {
-    path: "/dashboard",
-    name: "Dashboard",
-    icon: Dashboard,
-    component: DashboardPage,
-    layout: "/l"
-  },
-  {
-    path: "/home",
-    name: "Home",
-    icon: Home,
-    component: HomePage,
-    layout: "/l"
-  },
-  {
-    path: "/task",
-    name: "Recent Task",
-    icon: Assignment,
-    component: Task,
-    layout: "/l"
-  },
-  {
-    path: "/addTask",
-    name: "Add Task",
-    icon: Assignment,
-    component: AddTask,
-    layout: "/l"
-  },
-  {
-    path: "/user",
-    name: "User Profile",
-    icon: Person,
-    component: UserProfile,
-    layout: "/l"
-  },
-  {
-    path: "/view/users",
-    name: "Users List",
-    icon: PeopleIcon,
-    component: UsersView,
-    layout: "/l"
-  },
-  {
-    path: "/add/users",
-    name: "Users Add",
-    icon: PersonAddIcon,
-    component: UsersAdd,
-    layout: "/l"
-  },
-  {
-    path: "/edit/user",
-    name: "Edit User",
-    icon: EditIcon,
-    component: EditUser,
-    layout: "/l"
-  },
-  {
-    path: "/editTask/:id",
-    name: "Edit Task",
-    icon: EditIcon,
-    component: EditTask,
-    layout: "/l"
+import EditTask from 'views/Task/EditTask/editTask';
+var adminDashboardRoutes=[];
+if(localStorage.getItem('usertype')){
+  var userTypeGet=localStorage.getItem('usertype');
+  if(userTypeGet==='labeller'){
+    adminDashboardRoutes = [
+      {
+        path: "/home",
+        name: "Home",
+        icon: Home,
+        component: HomePage,
+        layout: "/l"
+      },
+      {
+        path: "/task",
+        name: "Recent Task",
+        icon: Assignment,
+        component: Task,
+        layout: "/l"
+      },
+      {
+        path: "/user",
+        name: "User Profile",
+        icon: Person,
+        component: UserProfile,
+        layout: "/l"
+      },
+    ];
+    
   }
-];
+  else if(userTypeGet==='admin'){
+    adminDashboardRoutes = [
+      {
+        path: "/dashboard",
+        name: "Dashboard",
+        icon: Dashboard,
+        component: DashboardPage,
+        layout: "/l"
+      },
+      {
+        path: "/addTask",
+        name: "Add Task",
+        icon: Assignment,
+        component: AddTask,
+        layout: "/l"
+      },
+      {
+        path: "/user",
+        name: "User Profile",
+        icon: Person,
+        component: UserProfile,
+        layout: "/l"
+      },
+      {
+        path: "/view/users",
+        name: "Users List",
+        icon: PeopleIcon,
+        component: UsersView,
+        layout: "/l"
+      },
+      {
+        path: "/add/users",
+        name: "Users Add",
+        icon: PersonAddIcon,
+        component: UsersAdd,
+        layout: "/l"
+      },
+      {
+        path: "/edit/user",
+        name: "Edit User",
+        icon: EditIcon,
+        component: EditUser,
+        layout: "/l"
+      },
+      {
+        path: "/editTask/:id",
+        name: "Edit Task",
+        icon: EditIcon,
+        component: EditTask,
+        layout: "/l"
+      }
+    ];
+    
+  }
+}
+
 
 export default adminDashboardRoutes;

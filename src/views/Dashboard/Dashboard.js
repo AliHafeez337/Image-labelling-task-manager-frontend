@@ -134,9 +134,12 @@ class Dashboard extends React.Component {
     
     if (this.state.originalTasks){
       this.state.originalTasks.forEach(task => {
-        if (task.name.search(match) > -1){
-          result.push(task)
+        if(task.name){
+          if (task.name.search(match) > -1){
+            result.push(task)
+          }
         }
+        
       })
     }
     
