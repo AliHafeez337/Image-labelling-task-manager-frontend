@@ -174,6 +174,7 @@ class Dashboard extends React.Component {
 
   handleEditTask = (task) => {
     console.log(task)
+    this.props.history.push('/editTask/'+task._id);
   }
 
   handleArchiveTask = (task) => {
