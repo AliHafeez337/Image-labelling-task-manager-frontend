@@ -51,10 +51,10 @@ class EditTask extends React.Component {
       TaskLabels:null,
       TaskDate:null,
 
-      TaskNamev:null,
-      TaskAssignedTov:null,
-      TaskLabelsv:null,
-      TaskDatev:null,
+      TaskNamev:'',
+      TaskAssignedTov:[],
+      TaskLabelsv:'',
+      TaskDatev:'',
       TaskPhotov:[],
     }
   }
@@ -298,12 +298,14 @@ taskPhotos=[];
         this.setState({TaskLabelsv:labbelStr.substring(1)})
 
         let assignGet=res.data.assignedTo;
+        console.log(assignGet)
         let assignMake=[];
         let assignMakeObj;
         for (let index6 = 0; index6 < assignGet.length; index6++) {
             assignMakeObj={label:assignGet[index6].name+' | '+assignGet[index6].email, value:assignGet[index6]}
             assignMake.push(assignMakeObj)
         }
+        console.log(assignMake)
         this.setState({TaskAssignedTov:assignMake})
 
         axios.get('/admin/user/all')
@@ -351,8 +353,8 @@ taskPhotos=[];
     let notifi;
     let photos;
     photos = this.state.TaskPhotov.map((photo,index) =>
-      <div className="col-lg-4 col-md-6 col-sm-6">
-        <img src={url1.apiURL+'/'+photo.url} alt="..." style={{height:'200px',width:'200px'}} /><Button color="danger" round onClick={()=>this.deletePhotoO(index)}>Delete</Button>
+      <div className="col-lg-4 col-md-6 col-sm-6" key={ index }>
+        <img src={url1.apiURL+'/'+photo.url} alt="..." style={{ 'maxHeight': '200px', 'maxWidth': '200px'}} /><Button color="danger" round onClick={()=>this.deletePhotoO(index)}>Delete</Button>
       </div>
     )
     if(this.state.succes){

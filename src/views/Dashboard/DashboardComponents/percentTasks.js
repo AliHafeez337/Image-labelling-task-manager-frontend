@@ -47,7 +47,7 @@ const PercentageTasks = props => {
         </CardHeader>
         <CardFooter stats>
           <div className={classes.stats}>
-            Tasks(assigned) are completed.
+            Tasks are completed.
           </div>
         </CardFooter>
       </Card>

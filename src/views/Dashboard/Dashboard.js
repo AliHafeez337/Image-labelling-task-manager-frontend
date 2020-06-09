@@ -132,11 +132,13 @@ class Dashboard extends React.Component {
 
     var result = [], match = new RegExp(this.props.search, 'gi')
     
-    this.state.originalTasks.forEach(task => {
-      if (task.name.search(match) > -1){
-        result.push(task)
-      }
-    })
+    if (this.state.originalTasks){
+      this.state.originalTasks.forEach(task => {
+        if (task.name.search(match) > -1){
+          result.push(task)
+        }
+      })
+    }
     
     if (result.length !== this.state.tasks.length){
       // console.log(result, 'not equal')
@@ -196,7 +198,7 @@ class Dashboard extends React.Component {
 
   handleEditTask = (task) => {
     console.log(task)
-    this.props.history.push('/editTask/'+task._id);
+    this.props.history.push('/l/editTask/'+task._id);
   }
 
   handleArchiveTask = (task) => {
