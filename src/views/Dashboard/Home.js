@@ -27,15 +27,19 @@ class HomePage extends React.Component {
 
     var result = [], match = new RegExp(this.props.search, 'gi')
     
-    this.state.myOriginalTasks.forEach(task => {
-      if (task.name.search(match) > -1){
-        result.push(task)
-      }
-    })
+    if (this.state.myOriginalTasks){
+      this.state.myOriginalTasks.forEach(task => {
+        if (task.name.search(match) > -1){
+          result.push(task)
+        }
+      })
+    }
     
-    if (result.length !== this.state.mytasks.length){
-      // console.log(result, 'not equal')
-      this.setState({ mytasks: result })
+    if (this.state.mytasks){
+      if (result.length !== this.state.mytasks.length){
+        // console.log(result, 'not equal')
+        this.setState({ mytasks: result })
+      }
     }
 
     return true
