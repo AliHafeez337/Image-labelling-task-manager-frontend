@@ -81,7 +81,11 @@ class Login extends Component {
           localStorage.setItem("usertype",res.data.user.usertype);
           this.props.onTokenGet(res.data.token)
           setTimeout(() => {
-            this.props.history.push(`/admin/dashboard`)
+            if (res.data.user.usertype === 'admin'){
+              this.props.history.push('/l/dashboard')
+            } else {
+              this.props.history.push('/l/home')
+            }
           }, 500)
         }
         else if(res.data.errmsg){
@@ -132,12 +136,6 @@ class Login extends Component {
     );
   }
 }
-
-// const mapStoreToProps = state => {
-//   return {
-//     token
-//   }
-// }
 
 const mapPropsToDispatch = dispatch => {
   return {
