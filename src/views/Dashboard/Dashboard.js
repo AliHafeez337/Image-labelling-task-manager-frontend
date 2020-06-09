@@ -142,10 +142,12 @@ class Dashboard extends React.Component {
         
       })
     }
-    
-    if (result.length !== this.state.tasks.length){
-      // console.log(result, 'not equal')
-      this.setState({ tasks: result })
+
+    if (this.state.tasks){
+      if (result.length !== this.state.tasks.length){
+        // console.log(result, 'not equal')
+        this.setState({ tasks: result })
+      }
     }
 
     return true
