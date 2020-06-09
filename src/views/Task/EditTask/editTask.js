@@ -1,10 +1,9 @@
 import React from "react";
 // @material-ui/core components
+import url1 from '../../../config.js';
 import { makeStyles } from "@material-ui/core/styles";
 // core components
 import Select from 'react-select';
-import GridItem from "components/Grid/GridItem.js";
-import GridContainer from "components/Grid/GridContainer.js";
 import Button from "components/CustomButtons/Button.js";
 import Card from "components/Card/Card.js";
 import CardBody from "components/Card/CardBody.js";
@@ -39,11 +38,10 @@ class EditTask extends React.Component {
       errrMsg:'',
       imageInputAllow:false,
       selectedFile: null,
-      selectedFiles: [],
       imageSuccess:false,
       options : [],
       taskId:null,
-      buttonEnable:true,
+      buttonEnable:false,
       canDeleteIt:true,
 
       getTask:null,
@@ -57,17 +55,21 @@ class EditTask extends React.Component {
       TaskAssignedTov:null,
       TaskLabelsv:null,
       TaskDatev:null,
+      TaskPhotov:[],
     }
   }
 taskData={tname:null,tlabels:null,tassigned:[],tdate:null}
 taskPhotos=[];
   handleName = event => {
+    this.setState({TaskNamev:event.target.value})
     this.taskData.tname= event.target.value;
   }
   handleDate = event =>{
+    this.setState({TaskDatev:event.target.value})
     this.taskData.tdate= event.target.value;
   }
   handleLabels = event => {
+    this.setState({TaskLabelsv:event.target.value})
     let optimizedStringLabel;
     let labelArray=[];
     let labelArray2=[];
@@ -100,16 +102,69 @@ taskPhotos=[];
   }
 
   handleAssigned = value => {
-    this.taskData.tassigned=[]
-    let dat=value
-    for (let index = 0; index < dat.length; index++) {
-      this.taskData.tassigned.push(dat[index].value);
+    this.setState({TaskAssignedTov:value})
+    if(value){
+      this.taskData.tassigned=[]
+      let dat=value
+      for (let index = 0; index < dat.length; index++) {
+        this.taskData.tassigned.push(dat[index].value);
+      }
     }
   }
 
   imageArray=[];
   
   makeTask=()=> {
+
+    console.log(this.taskData.tassigned)
+    if(!this.taskData.tname){
+      this.taskData.tname=this.state.TaskNamev
+    }
+    if(!this.taskData.tdate){
+      this.taskData.tdate=this.state.TaskDatev
+    }
+    if(this.taskData.tassigned.length===0){
+      let dato=this.state.TaskAssignedTov
+      if(dato){
+        this.taskData.tassigned=[]
+        for (let indexe = 0; indexe < dato.length; indexe++) {
+          this.taskData.tassigned.push(dato[indexe].value);
+        }
+      }
+      console.log(this.taskData.tassigned)
+    }
+    if(!this.taskData.tlabels){
+      let optimizedStringLabel;
+      let labelArray=[];
+      let labelArray2=[];
+      optimizedStringLabel=this.state.TaskLabelsv;
+      if(optimizedStringLabel.includes(' ')){
+        optimizedStringLabel.replace(' ','')
+      }
+      if(optimizedStringLabel.includes('+')){
+        labelArray=optimizedStringLabel.split('+');
+      }
+      else{
+        labelArray.push(optimizedStringLabel);
+      }
+      for (let index = 0; index < labelArray.length; index++) {
+        if(labelArray[index].includes(':')){
+          let make2=labelArray[index].split(':');
+          if(make2[1].includes(',')){
+            let nextMake=make2[1].split(',');
+            for (let index2 = 0; index2 < nextMake.length; index2++) {
+              labelArray2.push({category:make2[0],name:nextMake[index2]})
+            }
+          }
+          else{
+            labelArray2.push({category:make2[0],name:make2[1]})
+          }
+        }
+        else{console.log('nno')}
+      }
+      this.taskData.tlabels=labelArray2;
+    }
+
     this.setState({
       TaskName:this.taskData.tname,
       TaskAssignedTo:this.taskData.tassigned,
@@ -125,6 +180,7 @@ taskPhotos=[];
           this.setState({errr:false});
           this.setState({succes:true});
           this.setState({succesMsg:res.data.msg});
+          window.scrollTo(0, 0);
         }
         else if(res.data.errmsg){
           this.setState({errr:true});
@@ -167,48 +223,89 @@ taskPhotos=[];
     }
   
   }
-
+  canAdd=false;
   onChangeHandler=event=>{
-    if(this.checkMimeType(event)){ 
+    if(this.checkMimeType(event) && event.target.files[0]){ 
       this.setState({
         selectedFile: event.target.files[0],
         loaded: 0,
       })
+      this.canAdd=true
     }
   }
   onClickHandler = () => {
-    this.setState({selectedFiles: []});
-    this.taskPhotos=[];
-    axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
-    console.log(this.state.selectedFile)
-    const data1 = new FormData() 
-    data1.append('photo', this.state.selectedFile)
-    axios.patch("taskImage/add?id="+this.state.taskId, data1, {
-          onUploadProgress: ProgressEvent => {
-          this.setState({
-            loaded: (ProgressEvent.loaded / ProgressEvent.total*100),
-        })}
-      })
-      .then(res => {
-        console.log(res.data);
-        this.taskPhotos=res.data.photos;
-        this.setState({buttonEnable:false})
-        this.imageArray.push(this.state.selectedFile)
-        this.setState({selectedFiles: this.imageArray})
-      })
+    if(this.canAdd){
+      this.setState({TaskPhotov: []});
+      this.taskPhotos=[];
+      axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
+      console.log(this.state.selectedFile)
+      const data1 = new FormData() 
+      data1.append('photo', this.state.selectedFile)
+      axios.patch("taskImage/add?id="+this.state.taskId, data1, {
+            onUploadProgress: ProgressEvent => {
+            this.setState({
+              loaded: (ProgressEvent.loaded / ProgressEvent.total*100),
+          })}
+        })
+        .then(res => {
+          console.log(res.data);
+          this.taskPhotos=res.data.photos;
+          this.imageArray.push(this.state.selectedFile)
+          this.setState({TaskPhotov:res.data.photos})
+          this.canAdd=false
+        })
+
+    }
   }
 
   componentWillMount(){
     let userList=[];
     let userRecieved=[];
     let userObj={};
-    this.setState({selectedFiles: []});
-    console.log(this.props.match.params.id)
 
+    let labbel;
+    let labbelStr='';
+    let catArray=[];
+    let catArrayDup=[];
+    this.setState({TaskPhotov: []});
+    console.log(this.props.match.params.id)
+    this.setState({taskId:this.props.match.params.id})
     axios.get('/task/'+this.props.match.params.id)
       .then(res => {
-        console.log(res.data);
         this.setState({getTask:res.data})
+        this.setState({TaskDatev:res.data.dueDate.substring(0,10)})
+        this.setState({TaskNamev:res.data.name})
+        this.setState({TaskPhotov:res.data.photos})
+        this.taskPhotos=res.data.photos;
+        labbel=res.data.labels
+        for (let index = 0; index < labbel.length; index++) {
+            if(!catArray.includes(labbel[index].category+':')){
+                catArray.push(labbel[index].category+':')
+                catArrayDup.push(labbel[index].category+':')
+            }
+        }
+        for (let index1 = 0; index1 < labbel.length; index1++) {
+            for (let index2 = 0; index2 < catArray.length; index2++) {
+                if(labbel[index1].category+':'===catArray[index2]){
+                    catArrayDup[index2] = catArrayDup[index2]+labbel[index1].name+','
+                }               
+            }
+        }
+        for (let index4 = 0; index4 < catArrayDup.length; index4++) {
+            labbelStr += "+"+catArrayDup[index4].slice(0, catArrayDup[index4].length-1)           
+        }        
+
+        this.setState({TaskLabelsv:labbelStr.substring(1)})
+
+        let assignGet=res.data.assignedTo;
+        let assignMake=[];
+        let assignMakeObj;
+        for (let index6 = 0; index6 < assignGet.length; index6++) {
+            assignMakeObj={label:assignGet[index6].name+' | '+assignGet[index6].email, value:assignGet[index6]}
+            assignMake.push(assignMakeObj)
+        }
+        this.setState({TaskAssignedTov:assignMake})
+
         axios.get('/admin/user/all')
           .then(res => {
             console.log(res.data);
@@ -230,7 +327,14 @@ taskPhotos=[];
           this.setState({succes:true});
           this.setState({succesMsg:res.data.msg});
           this.imageArray.splice(index,1);
-          this.setState({selectedFiles: this.imageArray})
+          if(res.data.doc.photos.length<1){
+            this.setState({buttonEnable:true})
+          }
+          else{
+            this.setState({buttonEnable:false})
+          }
+          this.taskPhotos=res.data.doc.photos;
+          this.setState({TaskPhotov:res.data.doc.photos})
         }
         else if(res.data.errmsg){
           this.setState({errr:true});
@@ -245,11 +349,12 @@ taskPhotos=[];
   render() {
     makeStyles(this.state.styles);
     let notifi;
-    let items;
-    items = this.state.selectedFiles.map((item,index) =>
-      <li>{item.name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Button color="danger" round onClick={()=>this.deletePhotoO(index)}>Delete</Button></li>
-    );
-    
+    let photos;
+    photos = this.state.TaskPhotov.map((photo,index) =>
+      <div className="col-lg-4 col-md-6 col-sm-6">
+        <img src={url1.apiURL+'/'+photo.url} alt="..." style={{height:'200px',width:'200px'}} /><Button color="danger" round onClick={()=>this.deletePhotoO(index)}>Delete</Button>
+      </div>
+    )
     if(this.state.succes){
       notifi=<SnackbarContent message={'SUCCESS: '+this.state.succesMsg} close color="success"/>;
     }
@@ -258,13 +363,14 @@ taskPhotos=[];
     }
     
     return (
-      <div>
+        <div className="container-fluid" style={{paddingTop: '70px'}}>
         {notifi}<br/>
-        <GridContainer>
-        <GridItem xs={12} sm={12} md={12}>
+        <div className="row">
+          <div className="col-lg-8 col-md-8 col-sm-12 offset-lg-2 offset-md-2">
             <Card>
+                <h3 style={{color:'green',textAlign:'center',fontWeight:'bolder'}}>EDIT TASK</h3>
               <CardBody>
-                  <small id="imageHelp" className="form-text text-muted">Select Task Images</small>
+                  <small id="imageHelp" className="form-text text-muted">Add More Task Images</small>
                   <div style={{border:'2px solid black'}}>
                     <div className="form-group" style={{padding: '30px'}}>
                         <input type="file" className="form-control" id="exampleInputImage" aria-describedby="imageHelp" onChange={this.onChangeHandler}/>
@@ -272,22 +378,23 @@ taskPhotos=[];
                         <Button color="success" round onClick={()=>this.onClickHandler()}>
                             Upload
                         </Button>
-                    </div><hr/>
-                    <div style={{padding: '30px'}}>
-                        <ol>
-                            {items}
-                        </ol>
+                        <hr/>
+                        <div className="row" style={{padding: '30px'}}>
+                       {photos}
+                      </div>
                     </div>
+
+                      
                   </div>
 
                   <div className="form-group">
                     <small id="nameHelp" className="form-text text-muted">Enter Task Name</small>
-                    <input type="text" className="form-control" id="exampleInputName" aria-describedby="emailHelp" placeholder="Enter Task Name" onChange={this.handleName}/>
+                    <input type="text" className="form-control" id="exampleInputName" aria-describedby="emailHelp" value={this.state.TaskNamev} placeholder={this.state.TaskNamev} onChange={this.handleName}/>
                   </div>
 
                   <div className="form-group">
                     <small id="labelsHelp" className="form-text text-muted">Enter labells in this format <b style={{color:'red'}}>Label Category1: lable1,lable2,lable3 + Label Category2: lable1,lable2,lable3 + Label Category3: lable1,lable2,lable3 <br/> (as many as you want like this format)</b></small>
-                    <textarea type="textarea" className="form-control" id="exampleInputName" aria-describedby="emailHelp" placeholder="Enter labels" onChange={this.handleLabels}/>
+                    <textarea type="textarea" className="form-control" id="exampleInputName" aria-describedby="emailHelp" value={this.state.TaskLabelsv} placeholder={this.state.TaskLabelsv} onChange={this.handleLabels}/>
                   </div>
                     <br/><br/>
                   
@@ -299,13 +406,14 @@ taskPhotos=[];
                     options={this.state.options}
                     className="basic-multi-select"
                     classNamePrefix="select"
+                    value={this.state.TaskAssignedTov}
                     onChange={(value) => this.handleAssigned(value)}
                   />
                   </div><br/>
 
                   <div className="form-group">
                     <small id="nameHelp" className="form-text text-muted">Due Date</small>
-                    <input type="date" className="form-control" id="exampleInputName" aria-describedby="emailHelp" placeholder="Select Due Date" onChange={this.handleDate}/>
+                    <input type="date" className="form-control" id="exampleInputName" aria-describedby="emailHelp" value={this.state.TaskDatev} placeholder="Select Due Date" onChange={this.handleDate}/>
                   </div>
 
                   <Button disabled={this.state.buttonEnable} color="success" round onClick={this.makeTask}>
@@ -313,9 +421,8 @@ taskPhotos=[];
                   </Button>
               </CardBody>
             </Card>
-          </GridItem>
-        </GridContainer>
-                  
+          </div>
+        </div>       
       </div>
     );
   }

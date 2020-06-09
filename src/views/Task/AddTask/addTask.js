@@ -1,5 +1,6 @@
 import React from "react";
 // @material-ui/core components
+import url1 from '../../../config.js';
 import { makeStyles } from "@material-ui/core/styles";
 // core components
 import Select from 'react-select';
@@ -39,7 +40,6 @@ class AddTask extends React.Component {
       errrMsg:'',
       imageInputAllow:false,
       selectedFile: null,
-      selectedFiles: [],
       imageSuccess:false,
       options : [],
       taskId:null,
@@ -50,6 +50,8 @@ class AddTask extends React.Component {
       TaskAssignedTo:null,
       TaskLabels:null,
       TaskDate:null,
+
+      TaskPhotov:[],
     }
   }
 taskData={tname:null,tlabels:null,tassigned:[],tdate:null}
@@ -118,6 +120,7 @@ taskPhotos=[];
           this.setState({errr:false});
           this.setState({succes:true});
           this.setState({succesMsg:res.data.msg});
+          window.scrollTo(0, 0);
         }
         else if(res.data.errmsg){
           this.setState({errr:true});
@@ -160,42 +163,46 @@ taskPhotos=[];
     }
   
   }
-
+  canAdd=false;
   onChangeHandler=event=>{
-    if(this.checkMimeType(event)){ 
+    if(this.checkMimeType(event) && event.target.files[0]){ 
       this.setState({
         selectedFile: event.target.files[0],
         loaded: 0,
       })
+      this.canAdd=true
     }
   }
   onClickHandler = () => {
-    this.setState({selectedFiles: []});
-    this.taskPhotos=[];
-    axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
-    console.log(this.state.selectedFile)
-    const data1 = new FormData() 
-    data1.append('photo', this.state.selectedFile)
-    axios.patch("taskImage/add?id="+this.state.taskId, data1, {
-          onUploadProgress: ProgressEvent => {
-          this.setState({
-            loaded: (ProgressEvent.loaded / ProgressEvent.total*100),
-        })}
-      })
-      .then(res => {
-        console.log(res.data);
-        this.taskPhotos=res.data.photos;
-        this.setState({buttonEnable:false})
-        this.imageArray.push(this.state.selectedFile)
-        this.setState({selectedFiles: this.imageArray})
-      })
+    if(this.canAdd){
+      this.setState({TaskPhotov: []});
+      this.taskPhotos=[];
+      axios.defaults.headers.post['Content-Type'] = 'multipart/form-data'
+      console.log(this.state.selectedFile)
+      const data1 = new FormData() 
+      data1.append('photo', this.state.selectedFile)
+      axios.patch("taskImage/add?id="+this.state.taskId, data1, {
+            onUploadProgress: ProgressEvent => {
+            this.setState({
+              loaded: (ProgressEvent.loaded / ProgressEvent.total*100),
+          })}
+        })
+        .then(res => {
+          console.log(res.data);
+          this.taskPhotos=res.data.photos;
+          this.setState({buttonEnable:false})
+          this.imageArray.push(this.state.selectedFile)
+          this.setState({TaskPhotov:res.data.photos})
+          this.canAdd=false
+        })
+    }
   }
 
   componentWillMount(){
     let userList=[];
     let userRecieved=[];
     let userObj={};
-    this.setState({selectedFiles: []});
+    this.setState({TaskPhotov: []});
     axios.post('/task/new')
       .then(res => {
         console.log(res.data);
@@ -221,7 +228,14 @@ taskPhotos=[];
           this.setState({succes:true});
           this.setState({succesMsg:res.data.msg});
           this.imageArray.splice(index,1);
-          this.setState({selectedFiles: this.imageArray})
+          if(res.data.doc.photos.length<1){
+            this.setState({buttonEnable:true})
+          }
+          else{
+            this.setState({buttonEnable:false})
+          }
+          this.taskPhotos=res.data.doc.photos;
+          this.setState({TaskPhotov:res.data.doc.photos})
         }
         else if(res.data.errmsg){
           this.setState({errr:true});
@@ -233,8 +247,8 @@ taskPhotos=[];
 
   }
   componentWillUnmount(){
-    this.setState({selectedFiles: []});
-    if(this.state.selectedFiles.length<0 || this.taskData.tname===null || this.taskData.tname==='' || this.taskData.tlabels===null || this.taskData.tlabels===[]){
+    this.setState({TaskPhotov: []});
+    if(this.state.TaskPhotov.length<0 || this.taskData.tname===null || this.taskData.tname==='' || this.taskData.tlabels===null || this.taskData.tlabels===[]){
       axios.delete('/task/delete/'+this.state.taskId)
       .then(res => {
         console.log(res.data);
@@ -244,10 +258,12 @@ taskPhotos=[];
   render() {
     makeStyles(this.state.styles);
     let notifi;
-    let items;
-    items = this.state.selectedFiles.map((item,index) =>
-      <li>{item.name}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<Button color="danger" round onClick={()=>this.deletePhotoO(index)}>Delete</Button></li>
-    );
+    let photos;
+    photos = this.state.TaskPhotov.map((photo,index) =>
+      <div className="col-lg-4 col-md-4 col-sm-6">
+        <img src={url1.apiURL+'/'+photo.url} alt="..." style={{height:'200px',width:'200px'}} /><Button color="danger" round onClick={()=>this.deletePhotoO(index)}>Delete</Button>
+      </div>
+    )
     
     if(this.state.succes){
       notifi=<SnackbarContent message={'SUCCESS: '+this.state.succesMsg} close color="success"/>;
@@ -263,7 +279,7 @@ taskPhotos=[];
         <GridItem xs={12} sm={12} md={12}>
             <Card>
               <CardBody>
-                  <small id="imageHelp" className="form-text text-muted">Select Task Images</small>
+                  <small id="imageHelp" className="form-text text-muted">Add More Task Images</small>
                   <div style={{border:'2px solid black'}}>
                     <div className="form-group" style={{padding: '30px'}}>
                         <input type="file" className="form-control" id="exampleInputImage" aria-describedby="imageHelp" onChange={this.onChangeHandler}/>
@@ -271,14 +287,12 @@ taskPhotos=[];
                         <Button color="success" round onClick={()=>this.onClickHandler()}>
                             Upload
                         </Button>
-                    </div><hr/>
-                    <div style={{padding: '30px'}}>
-                        <ol>
-                            {items}
-                        </ol>
+                        <hr/>
+                        <div className="row" style={{padding: '30px'}}>
+                       {photos}
+                      </div>
                     </div>
                   </div>
-
                   <div className="form-group">
                     <small id="nameHelp" className="form-text text-muted">Enter Task Name</small>
                     <input type="text" className="form-control" id="exampleInputName" aria-describedby="emailHelp" placeholder="Enter Task Name" onChange={this.handleName}/>
