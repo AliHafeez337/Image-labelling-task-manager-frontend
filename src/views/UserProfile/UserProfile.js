@@ -37,6 +37,8 @@ class UserP extends React.Component {
         }
       },
       userProfile:{},
+      userNamep:'',
+      userEmailp:'',
       name:'',
       email:'',
       password:'',
@@ -54,12 +56,14 @@ class UserP extends React.Component {
   }
   data={name:'',
   email:'',
-  password:'',
-  password2:''}
+  password:null,
+  password2:null}
   handleName = event => {
+    this.setState({userNamep:event.target.value})
     this.data.name= event.target.value;
   }
   handleEmail = event => {
+    this.setState({userEmailp:event.target.value})
     this.data.email= event.target.value;
   }
   handlePassword1 = event => {
@@ -74,6 +78,7 @@ class UserP extends React.Component {
         this.setState({userProfile:res.data});
         this.data.name=res.data.name;
         this.data.email=res.data.email;
+        this.setState({userNamep:res.data.name,userEmailp:res.data.email})
         if(res.data.photo){
           this.setState({profilePhotoVar:url1.apiURL+'/'+res.data.photo})
         }
@@ -92,7 +97,13 @@ class UserP extends React.Component {
       password:this.data.password,
       password2:this.data.password2
     },()=>{
-      const user = {name:this.state.name,email:this.state.email,password:this.state.password,password2:this.state.password2};
+      var user
+      if(this.data.password || this.data.password==='' || this.data.password2 || this.data.password2==='' ){
+        user = {name:this.state.name,email:this.state.email,password:this.state.password,password2:this.state.password2};
+      }
+      else{
+        user = {name:this.state.name,email:this.state.email};
+      }
       console.log(user);
       axios.patch('/user/update', user)
       .then(res => {
@@ -101,11 +112,12 @@ class UserP extends React.Component {
           this.setState({errr:false});
           this.setState({succes:true});
           this.setState({succesMsg:res.data.msg});
+          this.setState({userProfile:res.data.doc});
         }
         else if(res.data.errmsg){
           this.setState({errr:true});
           this.setState({succes:false});
-          this.setState({errrMsg:res.data.errmsg[0].msg});
+          this.setState({errrMsg:res.data.errmsg});
         }
       });
     });    
@@ -244,10 +256,10 @@ class UserP extends React.Component {
               </CardHeader>
               <CardBody>
                 <div className="form-group">
-                <input type="text" className="form-control" id="exampleInputName" aria-describedby="emailHelp" placeholder={this.state.userProfile.name} onChange={this.handleName}/>
+                <input type="text" className="form-control" id="exampleInputName" aria-describedby="emailHelp" value={this.state.userNamep} placeholder={this.state.userProfile.name} onChange={this.handleName}/>
                 </div>
                 <div className="form-group">
-                  <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder={this.state.userProfile.email}  onChange={this.handleEmail}/>
+                  <input type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={this.state.userEmailp} placeholder={this.state.userProfile.email}  onChange={this.handleEmail}/>
                   <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
                 </div>
                 <div className="form-group">
