@@ -1,9 +1,9 @@
 ﻿# Image_Labeling_Task_Manager-Frontend
 
 
-<!-- ## Project presentation
+## Project presentation
 
-- [**Part 1**]() -->
+- [**Video**](https://youtu.be/PWrip2g7YZA)
 
 
 ## Project setup
